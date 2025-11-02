@@ -1,0 +1,18 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  },
+  "imports": {
+    "@b-fuze/deno-dom": "jsr:@b-fuze/deno-dom@^0.1.56",
+    "@music/audio": "jsr:@music/audio",
+    "@std/assert": "jsr:@std/assert@1",
+    "@testing-library/react": "npm:@testing-library/react@^16.3.0",
+    "@tonejs/midi": "npm:@tonejs/midi@^2.0.28",
+    "@types/react": "npm:@types/react@^19.2.0",
+    "jzz": "npm:jzz@^1.9.6",
+    "jzz-midi-smf": "npm:jzz-midi-smf@^1.9.9",
+    "react": "npm:react@^19.2.0",
+    "react-dom": "npm:react-dom@^19.2.0",
+    "tonal": "npm:tonal@^6.4.2"
+  }
+}
