@@ -1,0 +1,41 @@
+{
+  "name": "synth",
+  "version": "0.1.0",
+  "description": "A synthesizer CLI and component library powered by Deno and Rust",
+  "type": "module",
+  "bin": {
+    "synth": "./bin/cli.mjs"
+  },
+  "exports": {
+    ".": {
+      "import": "./components/index.ts",
+      "types": "./components/index.ts"
+    },
+    "./components": {
+      "import": "./components/index.ts",
+      "types": "./components/index.ts"
+    },
+    "./components/*": {
+      "import": "./components/*.ts",
+      "types": "./components/*.ts"
+    }
+  },
+  "files": [
+    "bin",
+    "components",
+    "audio_engine/target/release/*.dll",
+    "audio_engine/target/release/*.so",
+    "audio_engine/target/release/*.dylib"
+  ],
+  "scripts": {
+    "build:rust": "cd audio_engine && cargo build --release"
+  },
+  "keywords": [
+    "synth",
+    "audio",
+    "synthesizer",
+    "deno"
+  ],
+  "license": "MIT"
+}
+

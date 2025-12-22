@@ -1,0 +1,10 @@
+[package]
+name = "audio_engine"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"] # Crucial: This creates a .dll / .dylib / .so
+
+[dependencies]
+rodio = "0.19"
