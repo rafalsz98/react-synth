@@ -1,95 +1,107 @@
-# synth
+# React Synth 🎹
 
-A synthesizer CLI and component library powered by Deno and Rust.
+Transform React code into music! A live coding synthesizer powered by Deno and React.
+
+## Quick Start
+
+```bash
+# Play a song
+deno task play examples/simple.tsx
+
+# Live coding mode (hot reload)
+deno task dev
+```
+
+## How It Works
+
+Write music using React components:
+
+```tsx
+import { Track, Loop, Note, Sequence } from "./src/components/index.ts";
+
+export default function MySong() {
+  return (
+    <Track bpm={120}>
+      {/* Simple kick drum pattern */}
+      <Loop id="kick" interval={1}>
+        <Note note="C2" duration={0.2} amp={0.5} />
+      </Loop>
+
+      {/* Melody arpeggio */}
+      <Loop id="melody" interval={2}>
+        <Sequence interval={0.25}>
+          <Note note="C4" type="sawtooth" />
+          <Note note="E4" type="sawtooth" />
+          <Note note="G4" type="sawtooth" />
+          <Note note="C5" type="sawtooth" />
+        </Sequence>
+      </Loop>
+    </Track>
+  );
+}
+```
+
+## Components
+
+### `<Track bpm={number}>`
+
+Root component that sets the tempo and provides audio context.
+
+### `<Loop id={string} interval={number}>`
+
+Repeats its children every `interval` beats.
+
+### `<Note>`
+
+Plays a single note.
+
+- `note` - Note name ("C4", "A#3") or frequency in Hz
+- `duration` - Duration in beats (default: 0.5)
+- `amp` - Volume 0-1 (default: 0.3)
+- `type` - Oscillator type: "sine", "square", "sawtooth", "triangle"
+
+### `<Sequence interval={number}>`
+
+Plays children one after another with `interval` beats between each.
 
 ## Prerequisites
 
-- [Deno](https://deno.land/) installed and in your PATH
-- [Rust](https://rustup.rs/) (for building the audio engine)
-
-## Installation
-
-```bash
-# Build the Rust audio engine first
-cd audio_engine
-cargo build --release
-cd ..
-
-# Install globally (optional)
-npm link
-```
-
-## Usage
-
-### CLI
-
-Run any TypeScript file with synth components:
-
-```bash
-npx synth my-song.ts
-```
-
-Or if installed globally:
-
-```bash
-synth my-song.ts
-```
-
-### Writing Music
-
-Create a TypeScript file and import from `synth`:
-
-```typescript
-// my-song.ts
-import { playNote, Notes, midiToFrequency } from "synth";
-
-// Play individual notes
-await playNote(Notes.A4, 500);  // A4 for 500ms
-
-// Play a melody
-const melody = [Notes.C4, Notes.E4, Notes.G4, Notes.C5];
-for (const note of melody) {
-  await playNote(note, 300);
-}
-
-// Use MIDI note numbers
-await playNote(midiToFrequency(60), 500);  // Middle C
-```
-
-### Available Components
-
-#### Functions
-
-- `noteOn(frequency: number)` - Start playing a note at the given frequency (Hz)
-- `noteOff()` - Stop the currently playing note
-- `playNote(frequency: number, durationMs: number)` - Play a note for a specific duration
-- `midiToFrequency(midiNote: number)` - Convert MIDI note number to frequency
-
-#### Constants
-
-- `Notes` - Common note frequencies (C4, D4, E4, F4, G4, A4, B4, C5)
+- [Deno](https://deno.land/) v2.0+
 
 ## Development
 
 ```bash
-# Run the demo
+# Run with hot reload
 deno task dev
 
-# Run the example
-deno task example
+# Edit examples/simple.tsx and hear changes live!
 ```
 
 ## Project Structure
 
 ```
-synth/
-├── bin/
-│   └── cli.mjs          # CLI entry point
-├── components/
-│   ├── index.ts         # Main exports
-│   └── audio-engine.ts  # Audio synthesis components
-├── audio_engine/        # Rust native audio library
+react-synth/
+├── src/
+│   ├── cli.ts              # CLI entry point
+│   ├── bootstrap.ts        # React + JSDOM setup
+│   ├── audio/
+│   │   └── context.ts      # Web Audio API singleton
+│   └── components/
+│       ├── Track.tsx       # Root component
+│       ├── Loop.tsx        # Looping
+│       ├── Note.tsx        # Oscillator notes
+│       ├── Sequence.tsx    # Sequential playback
+│       └── index.ts        # Exports
 ├── examples/
-│   └── simple.ts        # Example usage
-└── package.json         # npm package config
+│   └── simple.tsx          # Demo song
+└── deno.json               # Deno config
 ```
+
+## Inspired By
+
+- [Sonic Pi](https://sonic-pi.net/) - The original live coding synth
+- React's declarative component model
+
+## License
+
+MIT
