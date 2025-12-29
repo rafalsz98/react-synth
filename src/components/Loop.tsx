@@ -64,14 +64,12 @@ export function Loop({
     const loopId = id;
     const callbacks = callbacksRef.current;
 
-    // Create the master callback that calls all registered child callbacks
     const masterCallback: ScheduleCallback = (audioTime, beatTime) => {
       for (const callback of callbacks.values()) {
         callback(audioTime, beatTime);
       }
     };
 
-    // Register the loop with the scheduler
     scheduler.addLoop(loopId, interval, masterCallback);
 
     return () => {

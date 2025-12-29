@@ -12,7 +12,6 @@ import { getScheduler, type Scheduler } from "../audio/scheduler.ts";
 import type { AudioContext as AudioContextType } from "node-web-audio-api";
 
 interface TrackContextValue {
-  bpm: number;
   audioContext: AudioContextType;
   scheduler: Scheduler;
 }
@@ -55,7 +54,6 @@ export function Track({ bpm, children }: TrackProps): React.ReactElement {
   return (
     <TrackContext.Provider
       value={{
-        bpm,
         audioContext: scheduler.current.audioContext,
         scheduler: scheduler.current,
       }}

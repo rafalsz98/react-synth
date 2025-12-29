@@ -50,39 +50,32 @@ export function Note({
   const loop = useLoop();
   const sequence = useSequence();
 
-  // Convert note name to frequency if needed
   const frequency = typeof note === "number" ? note : noteToFrequency(note);
   const durationSec = scheduler.beatsToSeconds(duration);
 
   useEffect(() => {
-    // Function to play the note at a specific audio time
     const playNote = (audioTime: number) => {
       const endTime = audioTime + durationSec;
       const releaseStart = Math.max(audioTime + 0.01, endTime - release);
 
-      // Create oscillator
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
 
       oscillator.type = type;
       oscillator.frequency.value = frequency;
 
-      // Connect nodes
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
 
-      // Envelope: attack -> sustain -> release
       gainNode.gain.setValueAtTime(0.001, audioTime);
       gainNode.gain.linearRampToValueAtTime(amp, audioTime + attack);
       gainNode.gain.setValueAtTime(amp, releaseStart);
       gainNode.gain.exponentialRampToValueAtTime(0.001, endTime);
 
-      // Play
       oscillator.start(audioTime);
       oscillator.stop(endTime + 0.01);
     };
 
-    // If inside a Sequence, register with the sequence
     if (sequence && __stepIndex !== undefined) {
       sequence.registerStep(__stepIndex, (audioTime: number) => {
         playNote(audioTime);
@@ -93,8 +86,6 @@ export function Note({
       };
     }
 
-    // TODO: this should be inside loop - extracting children and doing itt automatically
-    // If inside a Loop (but not a Sequence), register directly with the loop
     if (loop) {
       loop.registerCallback(`note-${uniqueId}`, (audioTime: number) => {
         playNote(audioTime);
@@ -105,7 +96,6 @@ export function Note({
       };
     }
 
-    // If not inside a Loop or Sequence, play immediately (one-shot)
     const now = audioContext.currentTime + 0.005;
     playNote(now);
 
