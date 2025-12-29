@@ -116,7 +116,9 @@ export class Scheduler {
     });
 
     console.debug(
-      `[scheduler] loop "${id}" added, interval=${intervalBeats} beats, start=${nextBeat.toFixed(2)}`,
+      `[scheduler] loop "${id}" added, interval=${intervalBeats} beats, start=${
+        nextBeat.toFixed(2)
+      }`,
     );
   }
 

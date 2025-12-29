@@ -5,11 +5,11 @@
  * sample-accurate timing via the Web Audio API's clock.
  */
 import {
+  createContext,
+  type ReactNode,
+  useContext,
   useEffect,
   useRef,
-  createContext,
-  useContext,
-  type ReactNode,
 } from "react";
 import { useTrack } from "./Track.tsx";
 import type { ScheduleCallback } from "../audio/scheduler.ts";

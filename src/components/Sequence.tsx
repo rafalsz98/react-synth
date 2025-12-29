@@ -5,14 +5,14 @@
  * appropriate offset within the loop interval.
  */
 import React, {
+  Children,
+  cloneElement,
+  createContext,
+  isValidElement,
+  type ReactNode,
+  useContext,
   useEffect,
   useId,
-  createContext,
-  useContext,
-  Children,
-  isValidElement,
-  cloneElement,
-  type ReactNode,
 } from "react";
 import { useTrack } from "./Track.tsx";
 import { useLoop } from "./Loop.tsx";

@@ -3,12 +3,12 @@
  */
 import {
   createContext,
+  type ReactNode,
   useContext,
   useEffect,
   useRef,
-  type ReactNode,
 } from "react";
-import { type Scheduler, getScheduler } from "../audio/scheduler.ts";
+import { getScheduler, type Scheduler } from "../audio/scheduler.ts";
 import type { AudioContext as AudioContextType } from "node-web-audio-api";
 
 interface TrackContextValue {
@@ -48,25 +48,18 @@ interface TrackProps {
 export function Track({ bpm, children }: TrackProps): React.ReactElement {
   const scheduler = useRef<Scheduler>(getScheduler(bpm));
 
-  // Initialize scheduler
   useEffect(() => {
-    // Start the scheduler when Track mounts
     scheduler.current.start();
-
-    return () => {
-      // Don't stop on unmount to survive hot reloads
-      // scheduler.stop();
-    };
   }, [scheduler]);
 
-  const contextValue: TrackContextValue = {
-    bpm,
-    audioContext: scheduler.current.audioContext,
-    scheduler: scheduler.current,
-  };
-
   return (
-    <TrackContext.Provider value={contextValue}>
+    <TrackContext.Provider
+      value={{
+        bpm,
+        audioContext: scheduler.current.audioContext,
+        scheduler: scheduler.current,
+      }}
+    >
       {children}
     </TrackContext.Provider>
   );
