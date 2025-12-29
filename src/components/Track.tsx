@@ -1,15 +1,41 @@
-/**
- * Track - The root component that sets BPM and provides audio context + scheduler
- */
 import {
   createContext,
   type ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useRef,
 } from "react";
-import { getScheduler, type Scheduler } from "../audio/scheduler.ts";
+import {
+  getScheduler,
+  type ScheduleCallback,
+  type Scheduler,
+} from "../audio/scheduler.ts";
 import type { AudioContext as AudioContextType } from "node-web-audio-api";
+
+export interface ScheduleNoteContextValue {
+  /**
+   * Schedule a note to be played.
+   * @param id - Unique identifier for this note callback
+   * @param callback - The audio callback to invoke at the scheduled time
+   * @param stepIndex - Optional step index when inside a Sequence
+   */
+  scheduleNote: (
+    id: string,
+    callback: ScheduleCallback,
+    stepIndex?: number,
+  ) => void;
+
+  /**
+   * Unschedule a previously scheduled note.
+   * @param id - The identifier used when scheduling
+   */
+  unscheduleNote: (id: string) => void;
+}
+
+export const ScheduleNoteContext = createContext<
+  ScheduleNoteContextValue | null
+>(null);
 
 interface TrackContextValue {
   audioContext: AudioContextType;
@@ -17,17 +43,6 @@ interface TrackContextValue {
 }
 
 const TrackContext = createContext<TrackContextValue | null>(null);
-
-/**
- * Hook to access the track context from child components
- */
-export function useTrack(): TrackContextValue {
-  const ctx = useContext(TrackContext);
-  if (!ctx) {
-    throw new Error("useTrack must be used inside a <Track> component");
-  }
-  return ctx;
-}
 
 interface TrackProps {
   bpm: number;
@@ -44,21 +59,61 @@ interface TrackProps {
  *   </Loop>
  * </Track>
  */
-export function Track({ bpm, children }: TrackProps): React.ReactElement {
+export function Track({ bpm, children }: TrackProps) {
   const scheduler = useRef<Scheduler>(getScheduler(bpm));
+  const audioContext = scheduler.current.audioContext;
 
   useEffect(() => {
     scheduler.current.start();
   }, [scheduler]);
 
+  // Default scheduling: immediate playback (for standalone Notes)
+  const scheduleContextValue: ScheduleNoteContextValue = useMemo(
+    () => ({
+      scheduleNote: (_id, callback) => {
+        const now = audioContext.currentTime + 0.005;
+        callback(now, 0);
+      },
+      unscheduleNote: () => {
+        // Nothing to clean up for one-shot playback
+      },
+    }),
+    [audioContext],
+  );
+
   return (
     <TrackContext.Provider
       value={{
-        audioContext: scheduler.current.audioContext,
+        audioContext,
         scheduler: scheduler.current,
       }}
     >
-      {children}
+      <ScheduleNoteContext.Provider value={scheduleContextValue}>
+        {children}
+      </ScheduleNoteContext.Provider>
     </TrackContext.Provider>
   );
+}
+
+/**
+ * Hook to access the track context from child components
+ */
+export function useTrack(): TrackContextValue {
+  const ctx = useContext(TrackContext);
+  if (!ctx) {
+    throw new Error("useTrack must be used inside a <Track> component");
+  }
+  return ctx;
+}
+
+/**
+ * Hook to access the scheduling context from Note components
+ */
+export function useScheduleNote(): ScheduleNoteContextValue {
+  const ctx = useContext(ScheduleNoteContext);
+  if (!ctx) {
+    throw new Error("useScheduleNote must be used inside a <Track> component");
+  }
+
+  return ctx;
 }

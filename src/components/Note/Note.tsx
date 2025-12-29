@@ -1,10 +1,5 @@
-/**
- * Note - Plays a single note using an oscillator with scheduler integration
- */
 import { useEffect, useId } from "react";
-import { useTrack } from "../Track.tsx";
-import { useLoop } from "../Loop.tsx";
-import { useSequence } from "../Sequence.tsx";
+import { useScheduleNote, useTrack } from "../Track.tsx";
 import { noteToFrequency } from "./utils.ts";
 
 type OscillatorType = "sine" | "square" | "sawtooth" | "triangle";
@@ -44,11 +39,10 @@ export function Note({
   attack = 0.01,
   release = 0.1,
   __stepIndex,
-}: NoteProps): null {
+}: NoteProps) {
   const uniqueId = useId();
   const { audioContext, scheduler } = useTrack();
-  const loop = useLoop();
-  const sequence = useSequence();
+  const scheduleNote = useScheduleNote();
 
   const frequency = typeof note === "number" ? note : noteToFrequency(note);
   const durationSec = scheduler.beatsToSeconds(duration);
@@ -76,31 +70,9 @@ export function Note({
       oscillator.stop(endTime + 0.01);
     };
 
-    if (sequence && __stepIndex !== undefined) {
-      sequence.registerStep(__stepIndex, (audioTime: number) => {
-        playNote(audioTime);
-      });
-
-      return () => {
-        sequence.unregisterStep(__stepIndex);
-      };
-    }
-
-    if (loop) {
-      loop.registerCallback(`note-${uniqueId}`, (audioTime: number) => {
-        playNote(audioTime);
-      });
-
-      return () => {
-        loop.unregisterCallback(`note-${uniqueId}`);
-      };
-    }
-
-    const now = audioContext.currentTime + 0.005;
-    playNote(now);
-
+    scheduleNote.scheduleNote(uniqueId, playNote, __stepIndex);
     return () => {
-      // Nothing to clean up for one-shot
+      scheduleNote.unscheduleNote(uniqueId);
     };
   }, [
     note,
@@ -112,8 +84,7 @@ export function Note({
     attack,
     release,
     audioContext,
-    loop,
-    sequence,
+    scheduleNote,
     __stepIndex,
     uniqueId,
   ]);

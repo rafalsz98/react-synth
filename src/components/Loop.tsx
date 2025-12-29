@@ -1,36 +1,10 @@
-/**
- * Loop - Repeats its children at a regular interval using the scheduler
- *
- * This component registers a loop with the central scheduler, which handles
- * sample-accurate timing via the Web Audio API's clock.
- */
+import { type ReactNode, useEffect, useMemo, useRef } from "react";
 import {
-  createContext,
-  type ReactNode,
-  useContext,
-  useEffect,
-  useRef,
-} from "react";
-import { useTrack } from "./Track.tsx";
+  ScheduleNoteContext,
+  type ScheduleNoteContextValue,
+  useTrack,
+} from "./Track.tsx";
 import type { ScheduleCallback } from "../audio/scheduler.ts";
-
-interface LoopContextValue {
-  /** Register a callback to be called on each loop iteration */
-  registerCallback: (id: string, callback: ScheduleCallback) => void;
-  /** Unregister a callback */
-  unregisterCallback: (id: string) => void;
-  /** The loop's interval in beats */
-  interval: number;
-}
-
-const LoopContext = createContext<LoopContextValue | null>(null);
-
-/**
- * Hook to access the parent loop context
- */
-export function useLoop(): LoopContextValue | null {
-  return useContext(LoopContext);
-}
 
 interface LoopProps {
   /** Unique identifier for this loop */
@@ -56,7 +30,7 @@ export function Loop({
   id,
   interval,
   children,
-}: LoopProps): React.ReactElement {
+}: LoopProps) {
   const { scheduler } = useTrack();
   const callbacksRef = useRef<Map<string, ScheduleCallback>>(new Map());
 
@@ -64,30 +38,34 @@ export function Loop({
     const loopId = id;
     const callbacks = callbacksRef.current;
 
-    const masterCallback: ScheduleCallback = (audioTime, beatTime) => {
+    const runAllCallbacks: ScheduleCallback = (audioTime, beatTime) => {
       for (const callback of callbacks.values()) {
         callback(audioTime, beatTime);
       }
     };
 
-    scheduler.addLoop(loopId, interval, masterCallback);
+    scheduler.addLoop(loopId, interval, runAllCallbacks);
 
     return () => {
       scheduler.remove(loopId);
     };
   }, [id, interval, scheduler]);
 
-  const contextValue: LoopContextValue = {
-    registerCallback: (callbackId: string, callback: ScheduleCallback) => {
-      callbacksRef.current.set(callbackId, callback);
-    },
-    unregisterCallback: (callbackId: string) => {
-      callbacksRef.current.delete(callbackId);
-    },
-    interval,
-  };
+  const scheduleContextValue: ScheduleNoteContextValue = useMemo(
+    () => ({
+      scheduleNote: (noteId, callback) => {
+        callbacksRef.current.set(noteId, callback);
+      },
+      unscheduleNote: (noteId) => {
+        callbacksRef.current.delete(noteId);
+      },
+    }),
+    [],
+  );
 
   return (
-    <LoopContext.Provider value={contextValue}>{children}</LoopContext.Provider>
+    <ScheduleNoteContext.Provider value={scheduleContextValue}>
+      {children}
+    </ScheduleNoteContext.Provider>
   );
 }
