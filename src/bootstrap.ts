@@ -31,13 +31,3 @@ export function renderSynth(Component: React.FC): void {
 
   root.render(React.createElement(Component));
 }
-
-/**
- * Cleanup the synth renderer
- */
-export function unmountSynth(): void {
-  if (root) {
-    root.unmount();
-    root = null;
-  }
-}

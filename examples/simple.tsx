@@ -8,15 +8,16 @@ import { Track, Loop, Note, Sequence } from "../src/components/index.ts";
 export default function SimpleSong() {
   return (
     <Track bpm={120}>
+
       {/* Simple kick drum pattern - plays every beat */}
       <Loop id="kick" interval={1}>
         <Note note="C2" duration={0.2} amp={0.5} type="sine" />
       </Loop>
 
       {/* Hi-hat pattern - plays every half beat */}
-      {/* <Loop id="hihat" interval={1}>
+      <Loop id="hihat" interval={1}>
         <Note note="C6" duration={0.05} amp={0.1} type="sine" />
-      </Loop> */}
+      </Loop>
 
       {/* Melody arpeggio - plays a sequence every 2 beats */}
       {/* <Loop id="melody" interval={2}>

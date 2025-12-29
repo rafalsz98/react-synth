@@ -46,13 +46,13 @@ export function Note({
   __stepIndex,
 }: NoteProps): null {
   const uniqueId = useId();
-  const { audioContext, beatsToSeconds } = useTrack();
+  const { audioContext, scheduler } = useTrack();
   const loop = useLoop();
   const sequence = useSequence();
 
   // Convert note name to frequency if needed
   const frequency = typeof note === "number" ? note : noteToFrequency(note);
-  const durationSec = beatsToSeconds(duration);
+  const durationSec = scheduler.beatsToSeconds(duration);
 
   useEffect(() => {
     // Function to play the note at a specific audio time

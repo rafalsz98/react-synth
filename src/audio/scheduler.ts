@@ -7,7 +7,10 @@
  *
  * This gives us the best of both worlds: infinite loops with sample-accurate timing.
  */
-import type { AudioContext as AudioContextType } from "node-web-audio-api";
+import {
+  AudioContext,
+  type AudioContext as AudioContextType,
+} from "node-web-audio-api";
 
 export type ScheduleCallback = (audioTime: number, beatTime: number) => void;
 
@@ -25,24 +28,35 @@ interface ScheduledEvent {
 
 declare global {
   var __scheduler: Scheduler | undefined;
+  var __audioContext: AudioContextType | undefined;
 }
 
 export class Scheduler {
-  private audioContext: AudioContextType;
+  private _audioContext: AudioContextType;
   private bpm: number;
   private startTime: number; // Audio context time when playback started
   private events: Map<string, ScheduledEvent> = new Map();
   private timerID: ReturnType<typeof setInterval> | null = null;
   private isRunning: boolean = false;
 
-  // Timing configuration
   private lookahead: number = 0.1; // Schedule 100ms ahead
   private scheduleInterval: number = 25; // Check every 25ms
 
-  constructor(audioContext: AudioContextType, bpm: number) {
-    this.audioContext = audioContext;
+  constructor(bpm: number) {
+    this._audioContext = this.getOrCreateAudioContext();
     this.bpm = bpm;
-    this.startTime = audioContext.currentTime;
+    this.startTime = this._audioContext.currentTime;
+  }
+
+  private getOrCreateAudioContext(): AudioContextType {
+    if (!globalThis.__audioContext) {
+      globalThis.__audioContext = new AudioContext();
+    }
+    return globalThis.__audioContext;
+  }
+
+  get audioContext(): AudioContextType {
+    return this._audioContext;
   }
 
   /**
@@ -63,7 +77,7 @@ export class Scheduler {
    * Get current beat position
    */
   getCurrentBeat(): number {
-    const elapsed = this.audioContext.currentTime - this.startTime;
+    const elapsed = this._audioContext.currentTime - this.startTime;
     return this.secondsToBeats(elapsed);
   }
 
@@ -100,7 +114,7 @@ export class Scheduler {
     id: string,
     intervalBeats: number,
     callback: ScheduleCallback,
-    startBeat?: number
+    startBeat?: number,
   ): void {
     // Calculate start time - either specified or next interval boundary
     const currentBeat = this.getCurrentBeat();
@@ -129,9 +143,11 @@ export class Scheduler {
     });
 
     console.log(
-      `🔁 Scheduled loop [${id}] every ${intervalBeats} beats, starting at beat ${nextBeat.toFixed(
-        2
-      )}`
+      `🔁 Scheduled loop [${id}] every ${intervalBeats} beats, starting at beat ${
+        nextBeat.toFixed(
+          2,
+        )
+      }`,
     );
   }
 
@@ -170,7 +186,7 @@ export class Scheduler {
    * The core scheduler loop - runs frequently, schedules ahead
    */
   private schedule(): void {
-    const currentAudioTime = this.audioContext.currentTime;
+    const currentAudioTime = this._audioContext.currentTime;
     const currentBeat = this.getCurrentBeat();
     const lookaheadBeats = this.secondsToBeats(this.lookahead);
     const scheduleUntilBeat = currentBeat + lookaheadBeats;
@@ -215,7 +231,7 @@ export class Scheduler {
   start(): void {
     if (this.isRunning) return;
 
-    this.startTime = this.audioContext.currentTime;
+    this.startTime = this._audioContext.currentTime;
     this.isRunning = true;
 
     // Reset all events to start from beat 0
@@ -227,7 +243,6 @@ export class Scheduler {
     }
 
     this.timerID = setInterval(() => this.schedule(), this.scheduleInterval);
-    console.log(`▶️  Scheduler started at ${this.bpm} BPM`);
   }
 
   /**
@@ -260,12 +275,9 @@ export class Scheduler {
 /**
  * Get or create the global scheduler
  */
-export function getScheduler(
-  audioContext: AudioContextType,
-  bpm: number
-): Scheduler {
+export function getScheduler(bpm: number): Scheduler {
   if (!globalThis.__scheduler) {
-    globalThis.__scheduler = new Scheduler(audioContext, bpm);
+    globalThis.__scheduler = new Scheduler(bpm);
   } else {
     // Update BPM if it changed
     globalThis.__scheduler.setBpm(bpm);
@@ -276,14 +288,11 @@ export function getScheduler(
 /**
  * Reset the global scheduler
  */
-export function resetScheduler(
-  audioContext: AudioContextType,
-  bpm: number
-): Scheduler {
+export function resetScheduler(bpm: number): Scheduler {
   if (globalThis.__scheduler) {
     globalThis.__scheduler.stop();
     globalThis.__scheduler.clear();
   }
-  globalThis.__scheduler = new Scheduler(audioContext, bpm);
+  globalThis.__scheduler = new Scheduler(bpm);
   return globalThis.__scheduler;
 }

@@ -60,7 +60,7 @@ export function Sequence({
   children,
 }: SequenceProps): React.ReactElement {
   const uniqueId = useId();
-  const { beatsToSeconds } = useTrack();
+  const { scheduler } = useTrack();
   const loop = useLoop();
   const childArray = Children.toArray(children);
   const totalSteps = childArray.length;
@@ -78,7 +78,7 @@ export function Sequence({
     // Register a single callback with the parent loop that handles all steps
     const sequenceCallback: ScheduleCallback = (audioTime, beatTime) => {
       for (let i = 0; i < totalSteps; i++) {
-        const stepOffset = beatsToSeconds(i * interval);
+        const stepOffset = scheduler.beatsToSeconds(i * interval);
         const stepAudioTime = audioTime + stepOffset;
         const stepBeatTime = beatTime + i * interval;
 
@@ -94,7 +94,7 @@ export function Sequence({
     return () => {
       loop.unregisterCallback(`seq-${uniqueId}`);
     };
-  }, [loop, interval, totalSteps, beatsToSeconds, uniqueId]);
+  }, [loop, interval, totalSteps, scheduler, uniqueId]);
 
   const contextValue: SequenceContextValue = {
     registerStep: (stepIndex: number, callback: ScheduleCallback) => {

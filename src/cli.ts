@@ -29,30 +29,30 @@ const fileUrl = toFileUrl(absolutePath).href;
 
 console.log(`🎵 Loading ${filePath}...`);
 
-try {
-  // Dynamically import the song file
-  const module = await import(fileUrl);
+async function loadAndRender() {
+  // Cache-bust to get fresh module
+  const module = await import(`${fileUrl}?t=${Date.now()}`);
+  renderSynth(module.default);
+}
 
-  const Song = module.default;
-  if (!Song) {
-    console.error("❌ File must export a default function component");
-    Deno.exit(1);
+await loadAndRender();
+console.log("🎹 Playing track");
+
+// Hot reload
+let debounce: number | undefined;
+for await (const event of Deno.watchFs(absolutePath)) {
+  if (event.kind === "modify") {
+    clearTimeout(debounce);
+    debounce = setTimeout(async () => {
+      try {
+        await loadAndRender();
+        console.log("✅ Hot reloaded");
+      } catch (e) {
+        console.error(
+          "❌ Error:",
+          e instanceof Error ? e.message : JSON.stringify(e),
+        );
+      }
+    }, 100);
   }
-
-  // Render the React component
-  renderSynth(Song);
-
-  console.log(`
-🎹 React Synth is playing!
-   Press Ctrl+C to stop
-`);
-
-  // Keep the process alive
-  await new Promise(() => {
-    // Never resolves - keeps the process running
-    setInterval(() => {}, 1000);
-  });
-} catch (error) {
-  console.error("❌ Error loading song:", error);
-  Deno.exit(1);
 }

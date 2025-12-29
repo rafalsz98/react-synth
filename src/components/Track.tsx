@@ -8,7 +8,6 @@ import {
   useRef,
   type ReactNode,
 } from "react";
-import { getAudioContext } from "../audio/context.ts";
 import { type Scheduler, getScheduler } from "../audio/scheduler.ts";
 import type { AudioContext as AudioContextType } from "node-web-audio-api";
 
@@ -16,8 +15,6 @@ interface TrackContextValue {
   bpm: number;
   audioContext: AudioContextType;
   scheduler: Scheduler;
-  beatsToSeconds: (beats: number) => number;
-  getCurrentBeat: () => number;
 }
 
 const TrackContext = createContext<TrackContextValue | null>(null);
@@ -49,24 +46,12 @@ interface TrackProps {
  * </Track>
  */
 export function Track({ bpm, children }: TrackProps): React.ReactElement {
-  const audioContext = getAudioContext();
-  const schedulerRef = useRef<Scheduler | null>(null);
+  const scheduler = useRef<Scheduler>(getScheduler(bpm));
 
   // Initialize scheduler
-  if (!schedulerRef.current) {
-    schedulerRef.current = getScheduler(audioContext, bpm);
-  }
-
-  const scheduler = schedulerRef.current;
-
-  useEffect(() => {
-    // Update BPM if it changes
-    scheduler.setBpm(bpm);
-  }, [bpm, scheduler]);
-
   useEffect(() => {
     // Start the scheduler when Track mounts
-    scheduler.start();
+    scheduler.current.start();
 
     return () => {
       // Don't stop on unmount to survive hot reloads
@@ -76,10 +61,8 @@ export function Track({ bpm, children }: TrackProps): React.ReactElement {
 
   const contextValue: TrackContextValue = {
     bpm,
-    audioContext,
-    scheduler,
-    beatsToSeconds: (beats: number) => scheduler.beatsToSeconds(beats),
-    getCurrentBeat: () => scheduler.getCurrentBeat(),
+    audioContext: scheduler.current.audioContext,
+    scheduler: scheduler.current,
   };
 
   return (
