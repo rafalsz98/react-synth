@@ -9,7 +9,7 @@ import { noteToFrequency } from "./utils.ts";
 
 type OscillatorType = "sine" | "square" | "sawtooth" | "triangle";
 
-interface NoteProps extends ADSRProps {
+type NoteProps = ADSRProps & {
   /** Note name (e.g., "A4", "C#3") or frequency in Hz */
   note: string | number;
   /** Amplitude 0-1 (default: 0.3) */
@@ -18,7 +18,7 @@ interface NoteProps extends ADSRProps {
   type?: OscillatorType;
   /** Step index when inside a Sequence (injected by Sequence) */
   __stepIndex?: number;
-}
+};
 
 /**
  * Note component - plays a note using Web Audio oscillator with ADSR envelope

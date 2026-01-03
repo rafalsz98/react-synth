@@ -1,0 +1,47 @@
+# Cursor Rules for react-synth
+
+## TypeScript Style Guide
+
+### Type Definitions
+
+- Always use `type` instead of `interface` for all type definitions
+- Use intersection types (`&`) instead of `extends` when composing types
+- Prefer explicit type annotations for better IDE support
+
+### Examples
+
+✅ Correct:
+
+```typescript
+type UserProps = BaseProps & {
+  name: string;
+  age: number;
+};
+
+type Config = {
+  apiUrl: string;
+  timeout: number;
+};
+```
+
+❌ Avoid:
+
+```typescript
+interface UserProps extends BaseProps {
+  name: string;
+  age: number;
+}
+
+interface Config {
+  apiUrl: string;
+  timeout: number;
+}
+```
+
+## Architecture Principles
+
+- Follow the "two clocks" scheduling pattern (JavaScript timer + Web Audio
+  clock)
+- All timing is beat-based, converted via `(beats * 60) / bpm`
+- Components register callbacks rather than rendering DOM
+- Use React context for passing audio/scheduling dependencies

@@ -6,14 +6,14 @@ import {
 } from "./Track.tsx";
 import type { ScheduleCallback } from "../audio/scheduler.ts";
 
-interface LoopProps {
+type LoopProps = {
   /** Unique identifier for this loop */
   id: string;
   /** Interval in beats between each loop iteration */
   interval: number;
   /** Content to play on each loop */
   children: ReactNode;
-}
+};
 
 /**
  * Loop component - plays its children repeatedly at the specified interval

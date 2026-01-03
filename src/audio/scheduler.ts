@@ -12,13 +12,13 @@ import {
 
 export type ScheduleCallback = (audioTime: number, beatTime: number) => void;
 
-interface ScheduledEvent {
+type ScheduledEvent = {
   id: string;
   nextBeatTime: number;
   intervalBeats: number;
   callback: ScheduleCallback;
   active: boolean;
-}
+};
 
 declare global {
   var __scheduler: Scheduler | undefined;

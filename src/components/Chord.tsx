@@ -9,7 +9,7 @@ import { noteToFrequency } from "./Note/utils.ts";
 
 type OscillatorType = "sine" | "square" | "sawtooth" | "triangle";
 
-interface ChordProps extends ADSRProps {
+type ChordProps = ADSRProps & {
   /** Array of note names (e.g., ["A4", "C#3", "E4"]) or frequencies in Hz */
   notes: (string | number)[];
   /** Amplitude 0-1 (default: 0.3) */
@@ -18,7 +18,7 @@ interface ChordProps extends ADSRProps {
   type?: OscillatorType;
   /** Step index when inside a Sequence (injected by Sequence) */
   __stepIndex?: number;
-}
+};
 
 /**
  * Chord component - plays multiple notes simultaneously using Web Audio oscillators

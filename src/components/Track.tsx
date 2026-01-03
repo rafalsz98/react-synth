@@ -13,7 +13,7 @@ import {
 } from "../audio/scheduler.ts";
 import type { AudioContext as AudioContextType } from "node-web-audio-api";
 
-export interface ScheduleNoteContextValue {
+export type ScheduleNoteContextValue = {
   /**
    * Schedule a note to be played.
    * @param id - Unique identifier for this note callback
@@ -31,23 +31,23 @@ export interface ScheduleNoteContextValue {
    * @param id - The identifier used when scheduling
    */
   unscheduleNote: (id: string) => void;
-}
+};
 
 export const ScheduleNoteContext = createContext<
   ScheduleNoteContextValue | null
 >(null);
 
-interface TrackContextValue {
+type TrackContextValue = {
   audioContext: AudioContextType;
   scheduler: Scheduler;
-}
+};
 
 const TrackContext = createContext<TrackContextValue | null>(null);
 
-interface TrackProps {
+type TrackProps = {
   bpm: number;
   children: ReactNode;
-}
+};
 
 /**
  * Track component - wraps your song and provides timing context

@@ -16,12 +16,12 @@ import {
 } from "./Track.tsx";
 import type { ScheduleCallback } from "../audio/scheduler.ts";
 
-interface SequenceProps {
+type SequenceProps = {
   /** Time interval between each child in beats */
   interval: number;
   /** Children to play in sequence */
   children: ReactNode;
-}
+};
 
 /**
  * Sequence component - plays children one after another with precise timing
