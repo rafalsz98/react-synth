@@ -7,8 +7,7 @@ import {
 } from "../utils/envelope.ts";
 import { noteToFrequency, resolveChordNotes } from "../utils/notes.ts";
 import type { NoteName } from "../types/music.ts";
-
-type OscillatorType = "sine" | "square" | "sawtooth" | "triangle";
+import { type OscillatorType, useSynth } from "./Synth/index.ts";
 
 type ChordProps = ADSRProps & {
   /**
@@ -23,8 +22,15 @@ type ChordProps = ADSRProps & {
   notes: string | (NoteName | number)[];
   /** Amplitude 0-1 (default: 0.3) */
   amp?: number;
-  /** Oscillator type (default: "sine") */
+  /**
+   * Oscillator type - overrides synth config if specified
+   * When inside a Synth component, this defaults to the synth's oscillator type
+   */
   type?: OscillatorType;
+  /** Filter cutoff - overrides synth config if specified */
+  cutoff?: number;
+  /** Filter resonance - overrides synth config if specified */
+  resonance?: number;
   /** Step index when inside a Sequence (injected by Sequence) */
   __stepIndex?: number;
 };
@@ -51,7 +57,9 @@ type ChordProps = ADSRProps & {
 export function Chord({
   notes,
   amp = 0.3,
-  type = "sine",
+  type,
+  cutoff,
+  resonance,
   attack = ADSR_DEFAULTS.attack,
   attack_level = ADSR_DEFAULTS.attack_level,
   decay = ADSR_DEFAULTS.decay,
@@ -64,6 +72,16 @@ export function Chord({
   const uniqueId = useId();
   const { audioContext, scheduler } = useTrack();
   const { scheduleNote, unscheduleNote } = useScheduleNote();
+  const synthConfig = useSynth();
+
+  // Use prop values if specified, otherwise use synth config
+  const oscillatorType = type ?? synthConfig.oscillator;
+  const filterCutoff = cutoff ?? synthConfig.filter.cutoff;
+  const filterResonance = resonance ?? synthConfig.filter.resonance;
+  const filterType = synthConfig.filter.type;
+  const voiceCount = synthConfig.voices.count;
+  const voiceDetune = synthConfig.voices.detune;
+  const voiceSpread = synthConfig.voices.spread;
 
   const resolvedNotes = resolveChordNotes(notes);
   const frequencies = resolvedNotes.map((note) =>
@@ -79,27 +97,61 @@ export function Chord({
     release,
   };
 
+  // Total number of oscillators = chord notes × voices per note
+  const totalOscillators = frequencies.length * voiceCount;
+
   useEffect(() => {
     const playChord = (audioTime: number) => {
       const gainNode = audioContext.createGain();
-      gainNode.connect(audioContext.destination);
+
+      // Create filter if cutoff is below maximum (20000 Hz)
+      if (filterCutoff < 20000) {
+        const filter = audioContext.createBiquadFilter();
+        filter.type = filterType;
+        filter.frequency.value = filterCutoff;
+        filter.Q.value = filterResonance;
+        gainNode.connect(filter);
+        filter.connect(audioContext.destination);
+      } else {
+        gainNode.connect(audioContext.destination);
+      }
 
       const endTime = applyADSREnvelope(
         gainNode,
         audioTime,
         adsrProps,
-        amp,
+        amp / totalOscillators, // Normalize amplitude across all oscillators
         (beats) => scheduler.beatsToSeconds(beats),
       );
 
-      // Create one oscillator per note, all connected to the shared gain node
+      // Create oscillators for each chord note
       for (const frequency of frequencies) {
-        const oscillator = audioContext.createOscillator();
-        oscillator.type = type;
-        oscillator.frequency.value = frequency;
-        oscillator.connect(gainNode);
-        oscillator.start(audioTime);
-        oscillator.stop(endTime + 0.01);
+        // Create voices for each note (for unison/detune effect)
+        for (let i = 0; i < voiceCount; i++) {
+          const oscillator = audioContext.createOscillator();
+          oscillator.type = oscillatorType;
+          oscillator.frequency.value = frequency;
+
+          // Apply detune spread across voices
+          if (voiceCount > 1 && voiceDetune > 0) {
+            const detuneOffset = (i / (voiceCount - 1) - 0.5) * voiceDetune;
+            oscillator.detune.value = detuneOffset;
+          }
+
+          // Apply stereo spread if multiple voices
+          if (voiceCount > 1 && voiceSpread > 0) {
+            const panner = audioContext.createStereoPanner();
+            const panValue = (i / (voiceCount - 1) - 0.5) * 2 * voiceSpread;
+            panner.pan.value = panValue;
+            oscillator.connect(panner);
+            panner.connect(gainNode);
+          } else {
+            oscillator.connect(gainNode);
+          }
+
+          oscillator.start(audioTime);
+          oscillator.stop(endTime + 0.01);
+        }
       }
     };
 
@@ -111,7 +163,14 @@ export function Chord({
     notes,
     frequencies,
     amp,
-    type,
+    oscillatorType,
+    filterCutoff,
+    filterResonance,
+    filterType,
+    voiceCount,
+    voiceDetune,
+    voiceSpread,
+    totalOscillators,
     adsrProps,
     audioContext,
     scheduler,
