@@ -4,78 +4,66 @@
  * This demonstrates the lookahead scheduler for sample-accurate timing.
  */
 import { Chord } from "../src/components/Chord.tsx";
-import { Loop, Note, Sequence, Track } from "../src/components/index.ts";
+import {
+  Loop,
+  Note,
+  Sample,
+  Sequence,
+  Synth,
+  Track,
+} from "../src/components/index.ts";
+import { NoteName } from "../src/types/music.ts";
 
 export default function SimpleSong() {
+  const patterns: [string, string, string, string][] = [
+    ["A1", "A2", "E2", "A2"], // a1: root, +12, +7, +12
+    ["G1", "G2", "D2", "G2"], // g1: root, +12, +7, +12
+    ["F1", "F2", "C2", "F2"], // f1: root, +12, +7, +12
+    ["E1", "E2", "B1", "E2"], // e1: root, +12, +7, +12
+  ];
+
   return (
     <Track bpm={113}>
-      {/* Simple kick drum pattern - plays every beat */}
-      <Loop id="kick" interval={1}>
-        <Note note="C2" amp={0.5} type="sine" />
-      </Loop>
-
-      <Loop interval={4} id="chord">
-        {/* <Note note="a3" /> */}
-        <Chord
-          notes="Cmaj7"
-          release={7}
-          amp={0.1}
-        />
-      </Loop>
-
-      {/* Hi-hat pattern - plays every half beat */}
-      <Loop id="hihat" interval={1}>
-        <Note note="C5" amp={0.1} type="sine" />
-      </Loop>
-
-      {/* Melody arpeggio - plays a sequence every 2 beats */}
-      <Loop id="melody" interval={3}>
-        <Sequence interval={0.25}>
-          <Note note="C4" type="sawtooth" amp={0.15} />
-          <Note note="E4" type="sawtooth" amp={0.15} />
-          <Note note="G4" type="sawtooth" amp={0.15} />
-          <Note note="B4" type="sawtooth" amp={0.15} />
-          <Note note="C5" type="sawtooth" amp={0.15} />
-          <Note note="B4" type="sawtooth" amp={0.15} />
-          <Note note="G4" type="sawtooth" amp={0.15} />
-          <Note note="E4" type="sawtooth" amp={0.15} />
-          <Chord
-            notes="Am"
-            type="sawtooth"
-            release={5}
-            amp={0.5}
-          />
-        </Sequence>
-        {/* <Sequence interval={0.5}> */}
-        {
-          /* <Chord
-            notes={["e3", "g3", "b3"]}
-            release={0.5}
-            type="sine"
-            amp={0.5}
-            duration={1}
-          /> */
-        }
-        {
-          /* <Note note="C4" duration={0.2} type="sawtooth" amp={0.15} />
-          <Chord notes={["g3", "b3", "d4"]} release={1} amp={0.5} />
-          <Chord notes={["f3", "a3", "c4"]} release={1} amp={0.5} />
-          <Chord notes={["e3", "g3", "b3"]} release={1} amp={0.5} /> */
-        }
-        {/* </Sequence> */}
-      </Loop>
-
-      {/* Bass notes - chord progression every 4 beats */}
       {
-        /* <Loop id="bass" interval={4}>
-        <Sequence interval={1}>
-          <Note note="C2" duration={0.8} type="triangle" amp={0.3} />
-          <Note note="G2" duration={0.8} type="triangle" amp={0.3} />
-          <Note note="A2" duration={0.8} type="triangle" amp={0.3} />
-          <Note note="F2" duration={0.8} type="triangle" amp={0.3} />
+        /* <Loop id="kick" interval={1}>
+        <Sample name="bd_haus" amp={2} cutoff={4000} />
+      </Loop> */
+      }
+
+      {
+        /* <Loop id="click" interval={2}>
+        <Sequence interval={0.25}>
+          {[...Array(4)].map((_, i) => (
+            <Sample
+              key={i}
+              name="drum_cymbal_closed"
+              amp={0.5}
+              rate={1.5}
+              pan={0.1}
+            />
+          ))}
         </Sequence>
       </Loop> */
       }
+
+      <Loop id="giorgio_arp" interval={16}>
+        <Synth type="prophet">
+          <Sequence interval={4}>
+            {patterns.map((pattern, idx) => (
+              <Sequence key={idx} interval={0.25}>
+                {[...Array(16)].map((_, i) => (
+                  <Note
+                    key={i}
+                    note={pattern[i % pattern.length] as NoteName}
+                    release={0.2}
+                    amp={1.5}
+                  />
+                ))}
+              </Sequence>
+            ))}
+          </Sequence>
+        </Synth>
+      </Loop>
     </Track>
   );
 }

@@ -74,23 +74,13 @@ export type SynthType =
   | "pluck";
 
 /**
- * Props for the Synth component
+ * Common synth overrides used by Synth, Note, and Chord components
  */
-export type SynthProps = {
-  /** Named synth type or custom configuration */
-  type: SynthType;
+export type SynthOverrides = {
   /** Override the oscillator type */
   oscillator?: OscillatorType;
-  /** Override filter cutoff frequency in Hz */
-  cutoff?: number;
-  /** Override filter resonance (Q factor) */
-  resonance?: number;
-  /** Override number of voices for unison effect */
-  voices?: number;
-  /** Override detune spread in cents */
-  detune?: number;
-  /** Override stereo spread 0-1 */
-  spread?: number;
-  /** Children components (Note, Chord, Sequence, etc.) */
-  children: React.ReactNode;
+  /** Override filter settings */
+  filter?: Partial<FilterConfig>;
+  /** Override voice/unison settings */
+  voices?: Partial<VoiceConfig>;
 };

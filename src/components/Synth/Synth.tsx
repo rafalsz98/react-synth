@@ -9,13 +9,20 @@
  */
 
 import { createContext, useContext, useMemo } from "react";
-import type { SynthConfig, SynthProps } from "./types.ts";
+import type { SynthConfig, SynthOverrides, SynthType } from "./types.ts";
 import { DEFAULT_SYNTH_CONFIG, getSynthPreset } from "./presets.ts";
 
 /**
  * Context for synth configuration
  */
 const SynthContext = createContext<SynthConfig | null>(null);
+
+type SynthProps = SynthOverrides & {
+  /** Named synth type preset */
+  type: SynthType;
+  /** Children components (Note, Chord, Sequence, etc.) */
+  children: React.ReactNode;
+};
 
 /**
  * Synth component - defines the synthesizer for child Note/Chord components
@@ -27,14 +34,14 @@ const SynthContext = createContext<SynthConfig | null>(null);
  * </Synth>
  *
  * @example
- * // Overriding preset parameters
- * <Synth type="prophet" cutoff={2000} resonance={6}>
+ * // Overriding preset parameters with nested structure
+ * <Synth type="prophet" filter={{ cutoff: 2000, resonance: 6 }}>
  *   <Chord notes="Am7" />
  * </Synth>
  *
  * @example
  * // Creating thick unison sound
- * <Synth type="saw" voices={4} detune={15} spread={0.8}>
+ * <Synth type="saw" voices={{ count: 4, detune: 15, spread: 0.8 }}>
  *   <Sequence interval={0.25}>
  *     <Note note="A3" />
  *     <Note note="C4" />
@@ -44,11 +51,8 @@ const SynthContext = createContext<SynthConfig | null>(null);
 export function Synth({
   type,
   oscillator,
-  cutoff,
-  resonance,
+  filter,
   voices,
-  detune,
-  spread,
   children,
 }: SynthProps) {
   // Build configuration by starting with preset and applying overrides
@@ -58,17 +62,17 @@ export function Synth({
     return {
       oscillator: oscillator ?? preset.oscillator,
       filter: {
-        type: preset.filter.type,
-        cutoff: cutoff ?? preset.filter.cutoff,
-        resonance: resonance ?? preset.filter.resonance,
+        type: filter?.type ?? preset.filter.type,
+        cutoff: filter?.cutoff ?? preset.filter.cutoff,
+        resonance: filter?.resonance ?? preset.filter.resonance,
       },
       voices: {
-        count: voices ?? preset.voices.count,
-        detune: detune ?? preset.voices.detune,
-        spread: spread ?? preset.voices.spread,
+        count: voices?.count ?? preset.voices.count,
+        detune: voices?.detune ?? preset.voices.detune,
+        spread: voices?.spread ?? preset.voices.spread,
       },
     };
-  }, [type, oscillator, cutoff, resonance, voices, detune, spread]);
+  }, [type, oscillator, filter, voices]);
 
   return (
     <SynthContext.Provider value={config}>

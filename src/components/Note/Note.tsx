@@ -7,25 +7,17 @@ import {
 } from "../../utils/envelope.ts";
 import { noteToFrequency } from "../../utils/notes.ts";
 import type { NoteName } from "../../types/music.ts";
-import { type OscillatorType, useSynth } from "../Synth/index.ts";
+import { type SynthOverrides, useSynth } from "../Synth/index.ts";
 
-type NoteProps = ADSRProps & {
-  /** Note name (e.g., "A4", "C#3") or frequency in Hz */
-  note: NoteName | number;
-  /** Amplitude 0-1 (default: 0.3) */
-  amp?: number;
-  /**
-   * Oscillator type - overrides synth config if specified
-   * When inside a Synth component, this defaults to the synth's oscillator type
-   */
-  type?: OscillatorType;
-  /** Filter cutoff - overrides synth config if specified */
-  cutoff?: number;
-  /** Filter resonance - overrides synth config if specified */
-  resonance?: number;
-  /** Step index when inside a Sequence (injected by Sequence) */
-  __stepIndex?: number;
-};
+type NoteProps = ADSRProps &
+  SynthOverrides & {
+    /** Note name (e.g., "A4", "C#3") or frequency in Hz */
+    note: NoteName | number;
+    /** Amplitude 0-1 (default: 0.3) */
+    amp?: number;
+    /** Step index when inside a Sequence (injected by Sequence) */
+    __stepIndex?: number;
+  };
 
 /**
  * Note component - plays a note using Web Audio oscillator with ADSR envelope
@@ -38,14 +30,16 @@ type NoteProps = ADSRProps & {
  *
  * @example
  * <Note note="A4" amp={0.5} attack={0.1} sustain={0.5} release={0.2} />
- * <Note note={440} type="sawtooth" attack={0.05} decay={0.1} sustain_level={0.7} />
+ * <Note note={440} oscillator="sawtooth" attack={0.05} decay={0.1} sustain_level={0.7} />
+ * <Note note="C4" filter={{ cutoff: 800, resonance: 5 }} />
+ * <Note note="E4" voices={{ count: 3, detune: 10, spread: 0.5 }} />
  */
 export function Note({
   note,
   amp = 0.3,
-  type,
-  cutoff,
-  resonance,
+  oscillator,
+  filter,
+  voices,
   attack = ADSR_DEFAULTS.attack,
   attack_level = ADSR_DEFAULTS.attack_level,
   decay = ADSR_DEFAULTS.decay,
@@ -61,13 +55,13 @@ export function Note({
   const synthConfig = useSynth();
 
   // Use prop values if specified, otherwise use synth config
-  const oscillatorType = type ?? synthConfig.oscillator;
-  const filterCutoff = cutoff ?? synthConfig.filter.cutoff;
-  const filterResonance = resonance ?? synthConfig.filter.resonance;
-  const filterType = synthConfig.filter.type;
-  const voiceCount = synthConfig.voices.count;
-  const voiceDetune = synthConfig.voices.detune;
-  const voiceSpread = synthConfig.voices.spread;
+  const oscillatorType = oscillator ?? synthConfig.oscillator;
+  const filterType = filter?.type ?? synthConfig.filter.type;
+  const filterCutoff = filter?.cutoff ?? synthConfig.filter.cutoff;
+  const filterResonance = filter?.resonance ?? synthConfig.filter.resonance;
+  const voiceCount = voices?.count ?? synthConfig.voices.count;
+  const voiceDetune = voices?.detune ?? synthConfig.voices.detune;
+  const voiceSpread = voices?.spread ?? synthConfig.voices.spread;
 
   const frequency = typeof note === "number" ? note : noteToFrequency(note);
   const adsrProps = {

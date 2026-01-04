@@ -97,7 +97,7 @@ export default function DaftPunk() {
       </Loop>
 
       {/* 2. The High-Hat / Click Track */}
-      <Loop id="click" interval={1}>
+      <Loop id="click" interval={2}>
         <Sequence interval={0.25}>
           {[...Array(4)].map((_, i) => (
             <Sample
@@ -158,3 +158,6 @@ export default function DaftPunk() {
 
 - Tone.js can't be used. `node-web-audio-api` is not fully compatible with web
   audioContext
+- cutoff behaves differently (for Sample, other too?)
+- would need something like `cutoff_filter = line(60, 110, steps: 32).mirror`
+- `[root, root + 12, root + 7, root + 12].ring.tick(:pattern)` doesnt work

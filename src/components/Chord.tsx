@@ -7,33 +7,25 @@ import {
 } from "../utils/envelope.ts";
 import { noteToFrequency, resolveChordNotes } from "../utils/notes.ts";
 import type { NoteName } from "../types/music.ts";
-import { type OscillatorType, useSynth } from "./Synth/index.ts";
+import { type SynthOverrides, useSynth } from "./Synth/index.ts";
 
-type ChordProps = ADSRProps & {
-  /**
-   * Chord specification - can be:
-   * - A chord name string (e.g., "Cmaj7", "Am", "F#m7", "Dm/F")
-   * - An array of note names (e.g., ["A4", "C#3", "E4"])
-   * - An array of frequencies in Hz (e.g., [440, 550, 660])
-   *
-   * When using chord names, specify the octave with a colon (e.g., "Cmaj7:4" for octave 4)
-   * Default octave is 3 if not specified.
-   */
-  notes: string | (NoteName | number)[];
-  /** Amplitude 0-1 (default: 0.3) */
-  amp?: number;
-  /**
-   * Oscillator type - overrides synth config if specified
-   * When inside a Synth component, this defaults to the synth's oscillator type
-   */
-  type?: OscillatorType;
-  /** Filter cutoff - overrides synth config if specified */
-  cutoff?: number;
-  /** Filter resonance - overrides synth config if specified */
-  resonance?: number;
-  /** Step index when inside a Sequence (injected by Sequence) */
-  __stepIndex?: number;
-};
+type ChordProps = ADSRProps &
+  SynthOverrides & {
+    /**
+     * Chord specification - can be:
+     * - A chord name string (e.g., "Cmaj7", "Am", "F#m7", "Dm/F")
+     * - An array of note names (e.g., ["A4", "C#3", "E4"])
+     * - An array of frequencies in Hz (e.g., [440, 550, 660])
+     *
+     * When using chord names, specify the octave with a colon (e.g., "Cmaj7:4" for octave 4)
+     * Default octave is 3 if not specified.
+     */
+    notes: string | (NoteName | number)[];
+    /** Amplitude 0-1 (default: 0.3) */
+    amp?: number;
+    /** Step index when inside a Sequence (injected by Sequence) */
+    __stepIndex?: number;
+  };
 
 /**
  * Chord component - plays multiple notes simultaneously using Web Audio oscillators
@@ -47,19 +39,23 @@ type ChordProps = ADSRProps & {
  * @example
  * // Using chord names (powered by Tonal)
  * <Chord notes="Cmaj7" amp={0.5} />
- * <Chord notes="Am:4" type="sawtooth" />  // A minor in octave 4
- * <Chord notes="Dm7/F" release={2} />     // D minor 7 with F bass
+ * <Chord notes="Am:4" oscillator="sawtooth" />  // A minor in octave 4
+ * <Chord notes="Dm7/F" release={2} />           // D minor 7 with F bass
  *
  * // Using note arrays
  * <Chord notes={["a3", "c4", "e4"]} amp={0.5} attack={0.1} sustain={2} release={0.5} />
- * <Chord notes={[440, 550, 660]} type="sawtooth" decay={0.2} sustain_level={0.7} />
+ * <Chord notes={[440, 550, 660]} oscillator="sawtooth" decay={0.2} sustain_level={0.7} />
+ *
+ * // With filter and voice overrides
+ * <Chord notes="Em7" filter={{ cutoff: 1000, resonance: 4 }} />
+ * <Chord notes="Cmaj" voices={{ count: 2, detune: 8 }} />
  */
 export function Chord({
   notes,
   amp = 0.3,
-  type,
-  cutoff,
-  resonance,
+  oscillator,
+  filter,
+  voices,
   attack = ADSR_DEFAULTS.attack,
   attack_level = ADSR_DEFAULTS.attack_level,
   decay = ADSR_DEFAULTS.decay,
@@ -75,13 +71,13 @@ export function Chord({
   const synthConfig = useSynth();
 
   // Use prop values if specified, otherwise use synth config
-  const oscillatorType = type ?? synthConfig.oscillator;
-  const filterCutoff = cutoff ?? synthConfig.filter.cutoff;
-  const filterResonance = resonance ?? synthConfig.filter.resonance;
-  const filterType = synthConfig.filter.type;
-  const voiceCount = synthConfig.voices.count;
-  const voiceDetune = synthConfig.voices.detune;
-  const voiceSpread = synthConfig.voices.spread;
+  const oscillatorType = oscillator ?? synthConfig.oscillator;
+  const filterType = filter?.type ?? synthConfig.filter.type;
+  const filterCutoff = filter?.cutoff ?? synthConfig.filter.cutoff;
+  const filterResonance = filter?.resonance ?? synthConfig.filter.resonance;
+  const voiceCount = voices?.count ?? synthConfig.voices.count;
+  const voiceDetune = voices?.detune ?? synthConfig.voices.detune;
+  const voiceSpread = voices?.spread ?? synthConfig.voices.spread;
 
   const resolvedNotes = resolveChordNotes(notes);
   const frequencies = resolvedNotes.map((note) =>

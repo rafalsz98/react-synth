@@ -21,6 +21,8 @@ type SequenceProps = {
   interval: number;
   /** Children to play in sequence */
   children: ReactNode;
+  /** Step index when nested inside another Sequence (injected by parent Sequence) */
+  __stepIndex?: number;
 };
 
 /**
@@ -36,6 +38,7 @@ type SequenceProps = {
 export function Sequence({
   interval,
   children,
+  __stepIndex,
 }: SequenceProps) {
   const uniqueId = useId();
   const { scheduler } = useTrack();
@@ -62,12 +65,20 @@ export function Sequence({
       }
     };
 
-    scheduleNote(`seq-${uniqueId}`, sequenceCallback);
+    scheduleNote(`seq-${uniqueId}`, sequenceCallback, __stepIndex);
 
     return () => {
       unscheduleNote(`seq-${uniqueId}`);
     };
-  }, [interval, totalSteps, scheduler, uniqueId]);
+  }, [
+    interval,
+    totalSteps,
+    scheduler,
+    uniqueId,
+    scheduleNote,
+    unscheduleNote,
+    __stepIndex,
+  ]);
 
   // Scheduling context for Notes inside this Sequence
   const scheduleContextValue: ScheduleNoteContextValue = useMemo(

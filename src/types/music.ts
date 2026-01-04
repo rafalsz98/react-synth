@@ -34,4 +34,4 @@ export type NoteInput = NoteName | number;
  * Available sample name, from directory src/samples.
  * TODO: Automate it
  */
-export type SampleName = "bd_haus";
+export type SampleName = "bd_haus" | "drum_cymbal_closed";
