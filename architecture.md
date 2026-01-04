@@ -153,3 +153,8 @@ export default function DaftPunk() {
   );
 }
 ```
+
+## Problems
+
+- Tone.js can't be used. `node-web-audio-api` is not fully compatible with web
+  audioContext
