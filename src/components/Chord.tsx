@@ -6,6 +6,7 @@ import {
   applyADSREnvelope,
 } from "../utils/envelope.ts";
 import { noteToFrequency, resolveChordNotes } from "../utils/notes.ts";
+import type { NoteName } from "../types/music.ts";
 
 type OscillatorType = "sine" | "square" | "sawtooth" | "triangle";
 
@@ -19,7 +20,7 @@ type ChordProps = ADSRProps & {
    * When using chord names, specify the octave with a colon (e.g., "Cmaj7:4" for octave 4)
    * Default octave is 3 if not specified.
    */
-  notes: string | (string | number)[];
+  notes: string | (NoteName | number)[];
   /** Amplitude 0-1 (default: 0.3) */
   amp?: number;
   /** Oscillator type (default: "sine") */

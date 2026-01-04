@@ -1,16 +1,20 @@
 import { Note } from "tonal";
 import { Chord as TonalChord } from "tonal";
+import type { NoteName } from "../types/music.ts";
 
 /**
  * Convert note name to frequency using Tonal
  * Supports all note formats: "A4", "C#3", "Db5", "Bb2", etc.
+ *
+ * Accepts both strongly-typed NoteName and plain strings (for internal use
+ * by Chord component which resolves chord names to note strings at runtime).
  *
  * @example
  * noteToFrequency("A4")  // => 440
  * noteToFrequency("C4")  // => 261.63
  * noteToFrequency("C#3") // => 138.59
  */
-export function noteToFrequency(note: string): number {
+export function noteToFrequency(note: NoteName | string): number {
   const freq = Note.freq(note);
   if (freq === null) {
     console.warn(`Invalid note: ${note}, defaulting to A4 (440Hz)`);

@@ -7,3 +7,5 @@ export { Sequence } from "./Sequence.tsx";
 export { getScheduler, Scheduler } from "../audio/scheduler.ts";
 
 export { renderSynth } from "../bootstrap.ts";
+
+export type { NoteName, PitchClass, NoteInput } from "../types/music.ts";

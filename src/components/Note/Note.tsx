@@ -6,12 +6,13 @@ import {
   applyADSREnvelope,
 } from "../../utils/envelope.ts";
 import { noteToFrequency } from "../../utils/notes.ts";
+import type { NoteName } from "../../types/music.ts";
 
 type OscillatorType = "sine" | "square" | "sawtooth" | "triangle";
 
 type NoteProps = ADSRProps & {
   /** Note name (e.g., "A4", "C#3") or frequency in Hz */
-  note: string | number;
+  note: NoteName | number;
   /** Amplitude 0-1 (default: 0.3) */
   amp?: number;
   /** Oscillator type (default: "sine") */
