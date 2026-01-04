@@ -29,3 +29,9 @@ export type NoteName = `${Letter}${Accidental}${Octave}`;
  * Note specification that can be either a note name string or frequency in Hz
  */
 export type NoteInput = NoteName | number;
+
+/**
+ * Available sample name, from directory src/samples.
+ * TODO: Automate it
+ */
+export type SampleName = "bd_haus";
