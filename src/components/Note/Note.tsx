@@ -5,7 +5,7 @@ import {
   type ADSRProps,
   applyADSREnvelope,
 } from "../../utils/envelope.ts";
-import { noteToFrequency } from "./utils.ts";
+import { noteToFrequency } from "../../utils/notes.ts";
 
 type OscillatorType = "sine" | "square" | "sawtooth" | "triangle";
 
