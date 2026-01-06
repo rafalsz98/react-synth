@@ -24,13 +24,35 @@ export type FilterType =
   | "allpass";
 
 /**
+ * Cutoff value that can be either a static number or a dynamic line pattern
+ */
+export type CutoffType =
+  | number
+  | {
+    /** Starting value (MIDI note number) */
+    from: number;
+    /** Ending value (MIDI note number) */
+    to: number;
+    /** Number of interpolation steps */
+    steps: number;
+    /** Whether to mirror the values (up then down) */
+    mirror?: boolean;
+    /**
+     * Manual step index override.
+     * Use this when you need a global step counter across nested sequences.
+     * If omitted, uses __stepIndex from the parent Sequence.
+     */
+    step?: number;
+  };
+
+/**
  * Configuration for the synthesizer's filter
  */
 export type FilterConfig = {
   /** Filter type (default: "lowpass") */
   type: FilterType;
-  /** Cutoff frequency in Hz (default: 20000 - no filtering) */
-  cutoff: number;
+  /** Cutoff type */
+  cutoff: CutoffType;
   /** Resonance/Q factor (default: 1) */
   resonance: number;
 };

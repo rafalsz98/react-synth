@@ -8,9 +8,12 @@ import {
 import { noteToFrequency, resolveChordNotes } from "../utils/notes.ts";
 import type { NoteName } from "../types/music.ts";
 import { type SynthOverrides, useSynth } from "./Synth/index.ts";
+import { resolveCutoff } from "../utils/line.ts";
 
-type ChordProps = ADSRProps &
-  SynthOverrides & {
+type ChordProps =
+  & ADSRProps
+  & SynthOverrides
+  & {
     /**
      * Chord specification - can be:
      * - A chord name string (e.g., "Cmaj7", "Am", "F#m7", "Dm/F")
@@ -73,7 +76,10 @@ export function Chord({
   // Use prop values if specified, otherwise use synth config
   const oscillatorType = oscillator ?? synthConfig.oscillator;
   const filterType = filter?.type ?? synthConfig.filter.type;
-  const filterCutoff = filter?.cutoff ?? synthConfig.filter.cutoff;
+  const filterCutoff = resolveCutoff(
+    filter?.cutoff ?? synthConfig.filter.cutoff,
+    __stepIndex ?? 0,
+  );
   const filterResonance = filter?.resonance ?? synthConfig.filter.resonance;
   const voiceCount = voices?.count ?? synthConfig.voices.count;
   const voiceDetune = voices?.detune ?? synthConfig.voices.detune;

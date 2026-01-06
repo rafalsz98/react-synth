@@ -2,13 +2,23 @@ import { useEffect, useId } from "react";
 import { useScheduleNote, useTrack } from "../Track.tsx";
 import { loadSample } from "../../audio/sampleLoader.ts";
 import type { SampleName } from "../../types/music.ts";
+import { midiToFrequency } from "../../utils/notes.ts";
 
 type SampleProps = {
   /** Sample name (without extension, e.g., "bd_haus") */
   name: SampleName;
   /** Amplitude/volume (default: 1) */
   amp?: number;
-  /** Filter cutoff frequency in Hz (optional, no filter if omitted) */
+  /**
+   * Filter cutoff as MIDI note number (Sonic Pi compatible)
+   *
+   * Common values:
+   * - 60  => ~262 Hz (C4)
+   * - 80  => ~831 Hz
+   * - 100 => ~2637 Hz
+   * - 110 => ~4699 Hz
+   * - 130 => ~20kHz (essentially no filtering)
+   */
   cutoff?: number;
   /** Playback rate multiplier (default: 1) */
   rate?: number;
@@ -57,7 +67,8 @@ export function Sample({
       if (cutoff !== undefined) {
         const filter = audioContext.createBiquadFilter();
         filter.type = "lowpass";
-        filter.frequency.value = cutoff;
+        // Convert MIDI note to Hz for Sonic Pi compatibility
+        filter.frequency.value = midiToFrequency(cutoff);
         currentNode.connect(filter);
         currentNode = filter;
       }

@@ -6,11 +6,14 @@ import {
   applyADSREnvelope,
 } from "../../utils/envelope.ts";
 import { noteToFrequency } from "../../utils/notes.ts";
+import { resolveCutoff } from "../../utils/line.ts";
 import type { NoteName } from "../../types/music.ts";
 import { type SynthOverrides, useSynth } from "../Synth/index.ts";
 
-type NoteProps = ADSRProps &
-  SynthOverrides & {
+type NoteProps =
+  & ADSRProps
+  & SynthOverrides
+  & {
     /** Note name (e.g., "A4", "C#3") or frequency in Hz */
     note: NoteName | number;
     /** Amplitude 0-1 (default: 0.3) */
@@ -57,7 +60,10 @@ export function Note({
   // Use prop values if specified, otherwise use synth config
   const oscillatorType = oscillator ?? synthConfig.oscillator;
   const filterType = filter?.type ?? synthConfig.filter.type;
-  const filterCutoff = filter?.cutoff ?? synthConfig.filter.cutoff;
+  const filterCutoff = resolveCutoff(
+    filter?.cutoff ?? synthConfig.filter.cutoff,
+    __stepIndex ?? 0,
+  );
   const filterResonance = filter?.resonance ?? synthConfig.filter.resonance;
   const voiceCount = voices?.count ?? synthConfig.voices.count;
   const voiceDetune = voices?.detune ?? synthConfig.voices.detune;

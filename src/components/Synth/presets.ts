@@ -16,7 +16,7 @@ export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
    */
   sine: {
     oscillator: "sine",
-    filter: { type: "lowpass", cutoff: 20000, resonance: 1 },
+    filter: { type: "lowpass", cutoff: 135.08, resonance: 1 },
     voices: { count: 1, detune: 0, spread: 0 },
   },
 
@@ -25,7 +25,7 @@ export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
    */
   saw: {
     oscillator: "sawtooth",
-    filter: { type: "lowpass", cutoff: 20000, resonance: 1 },
+    filter: { type: "lowpass", cutoff: 135.08, resonance: 1 },
     voices: { count: 1, detune: 0, spread: 0 },
   },
 
@@ -34,7 +34,7 @@ export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
    */
   square: {
     oscillator: "square",
-    filter: { type: "lowpass", cutoff: 20000, resonance: 1 },
+    filter: { type: "lowpass", cutoff: 135.08, resonance: 1 },
     voices: { count: 1, detune: 0, spread: 0 },
   },
 
@@ -43,7 +43,7 @@ export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
    */
   tri: {
     oscillator: "triangle",
-    filter: { type: "lowpass", cutoff: 20000, resonance: 1 },
+    filter: { type: "lowpass", cutoff: 135.08, resonance: 1 },
     voices: { count: 1, detune: 0, spread: 0 },
   },
 
@@ -54,7 +54,7 @@ export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
    */
   prophet: {
     oscillator: "sawtooth",
-    filter: { type: "lowpass", cutoff: 3000, resonance: 4 },
+    filter: { type: "lowpass", cutoff: 102.23, resonance: 4 },
     voices: { count: 3, detune: 12, spread: 0.5 },
   },
 
@@ -65,7 +65,7 @@ export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
    */
   hollow: {
     oscillator: "square",
-    filter: { type: "bandpass", cutoff: 1200, resonance: 2 },
+    filter: { type: "bandpass", cutoff: 86.37, resonance: 2 },
     voices: { count: 2, detune: 8, spread: 0.7 },
   },
 
@@ -75,7 +75,7 @@ export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
    */
   dark_ambience: {
     oscillator: "sawtooth",
-    filter: { type: "lowpass", cutoff: 800, resonance: 3 },
+    filter: { type: "lowpass", cutoff: 79.35, resonance: 3 },
     voices: { count: 4, detune: 15, spread: 0.8 },
   },
 
@@ -85,7 +85,7 @@ export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
    */
   bass: {
     oscillator: "sawtooth",
-    filter: { type: "lowpass", cutoff: 600, resonance: 5 },
+    filter: { type: "lowpass", cutoff: 74.37, resonance: 5 },
     voices: { count: 2, detune: 5, spread: 0.2 },
   },
 
@@ -95,7 +95,7 @@ export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
    */
   pluck: {
     oscillator: "square",
-    filter: { type: "lowpass", cutoff: 5000, resonance: 2 },
+    filter: { type: "lowpass", cutoff: 111.08, resonance: 2 },
     voices: { count: 2, detune: 6, spread: 0.3 },
   },
 };
