@@ -2,7 +2,8 @@ import { useEffect, useId } from "react";
 import { useScheduleNote, useTrack } from "../Track.tsx";
 import { loadSample } from "../../audio/sampleLoader.ts";
 import type { SampleName } from "../../types/music.ts";
-import { midiToFrequency } from "../../utils/notes.ts";
+import type { CutoffType } from "../Synth/types.ts";
+import { resolveCutoff } from "../../utils/line.ts";
 
 type SampleProps = {
   /** Sample name (without extension, e.g., "bd_haus") */
@@ -10,7 +11,7 @@ type SampleProps = {
   /** Amplitude/volume (default: 1) */
   amp?: number;
   /**
-   * Filter cutoff as MIDI note number (Sonic Pi compatible)
+   * Filter cutoff as MIDI note number or Line pattern (Sonic Pi compatible)
    *
    * Common values:
    * - 60  => ~262 Hz (C4)
@@ -18,8 +19,10 @@ type SampleProps = {
    * - 100 => ~2637 Hz
    * - 110 => ~4699 Hz
    * - 130 => ~20kHz (essentially no filtering)
+   *
+   * Can also be a Line pattern: { from: 60, to: 120, steps: 8 }
    */
-  cutoff?: number;
+  cutoff?: CutoffType;
   /** Playback rate multiplier (default: 1) */
   rate?: number;
   /** Stereo pan position from -1 (left) to 1 (right) (default: 0) */
@@ -47,6 +50,11 @@ export function Sample({
   const { audioContext } = useTrack();
   const scheduleNote = useScheduleNote();
 
+  // Resolve cutoff using the same logic as Note/Chord components
+  const filterCutoff = cutoff !== undefined
+    ? resolveCutoff(cutoff, __stepIndex ?? 0)
+    : 20000;
+
   useEffect(() => {
     let buffer: AudioBuffer | null = null;
 
@@ -64,11 +72,11 @@ export function Sample({
       // Build audio graph: source -> [filter] -> [panner] -> gain -> destination
       let currentNode: AudioNode = source;
 
-      if (cutoff !== undefined) {
+      // Create filter if cutoff is below maximum (20000 Hz)
+      if (filterCutoff < 20000) {
         const filter = audioContext.createBiquadFilter();
         filter.type = "lowpass";
-        // Convert MIDI note to Hz for Sonic Pi compatibility
-        filter.frequency.value = midiToFrequency(cutoff);
+        filter.frequency.value = filterCutoff;
         currentNode.connect(filter);
         currentNode = filter;
       }
@@ -99,7 +107,7 @@ export function Sample({
     uniqueId,
     __stepIndex,
     amp,
-    cutoff,
+    filterCutoff,
     rate,
     pan,
   ]);

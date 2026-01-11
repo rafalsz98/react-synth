@@ -1,18 +1,5 @@
-/**
- * Synth component types
- *
- * These types define the configuration options for synthesizers,
- * inspired by Sonic Pi's synth definitions.
- */
-
-/**
- * Available oscillator waveforms
- */
 export type OscillatorType = "sine" | "square" | "sawtooth" | "triangle";
 
-/**
- * Filter types available in Web Audio
- */
 export type FilterType =
   | "lowpass"
   | "highpass"
@@ -49,11 +36,11 @@ export type CutoffType =
  * Configuration for the synthesizer's filter
  */
 export type FilterConfig = {
-  /** Filter type (default: "lowpass") */
+  /** Filter type */
   type: FilterType;
   /** Cutoff type */
   cutoff: CutoffType;
-  /** Resonance/Q factor (default: 1) */
+  /** Resonance/Q factor */
   resonance: number;
 };
 
@@ -61,17 +48,14 @@ export type FilterConfig = {
  * Configuration for oscillator voices (for unison/detune effects)
  */
 export type VoiceConfig = {
-  /** Number of oscillator voices (default: 1) */
+  /** Number of oscillator voices */
   count: number;
-  /** Detune spread in cents between voices (default: 0) */
+  /** Detune spread in cents between voices */
   detune: number;
-  /** Stereo spread for voices 0-1 (default: 0) */
+  /** Stereo spread for voices 0-1 */
   spread: number;
 };
 
-/**
- * Complete synthesizer configuration
- */
 export type SynthConfig = {
   /** Oscillator waveform type */
   oscillator: OscillatorType;
@@ -81,9 +65,6 @@ export type SynthConfig = {
   voices: VoiceConfig;
 };
 
-/**
- * Named synth types inspired by Sonic Pi
- */
 export type SynthType =
   | "sine"
   | "saw"
@@ -95,14 +76,8 @@ export type SynthType =
   | "bass"
   | "pluck";
 
-/**
- * Common synth overrides used by Synth, Note, and Chord components
- */
 export type SynthOverrides = {
-  /** Override the oscillator type */
   oscillator?: OscillatorType;
-  /** Override filter settings */
   filter?: Partial<FilterConfig>;
-  /** Override voice/unison settings */
   voices?: Partial<VoiceConfig>;
 };

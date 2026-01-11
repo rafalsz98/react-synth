@@ -1,10 +1,3 @@
-/**
- * Scheduler - Lookahead scheduling for sample-accurate timing
- *
- * Uses the "two clocks" pattern:
- * - JavaScript timer (setInterval) runs frequently but imprecisely
- * - Web Audio clock schedules precisely in the lookahead window
- */
 import {
   AudioContext,
   type AudioContext as AudioContextType,

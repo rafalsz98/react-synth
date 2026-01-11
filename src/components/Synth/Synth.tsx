@@ -1,26 +1,11 @@
-/**
- * Synth component - wraps children with synthesizer configuration
- *
- * The Synth component provides a context that Note and Chord components
- * use to configure their oscillators, filters, and voice settings.
- *
- * Inspired by Sonic Pi's synth system, this allows you to define
- * the "instrument" that plays your notes.
- */
-
 import { createContext, useContext, useMemo } from "react";
 import type { SynthConfig, SynthOverrides, SynthType } from "./types.ts";
 import { DEFAULT_SYNTH_CONFIG, getSynthPreset } from "./presets.ts";
 
-/**
- * Context for synth configuration
- */
 const SynthContext = createContext<SynthConfig | null>(null);
 
 type SynthProps = SynthOverrides & {
-  /** Named synth type preset */
   type: SynthType;
-  /** Children components (Note, Chord, Sequence, etc.) */
   children: React.ReactNode;
 };
 
@@ -81,9 +66,6 @@ export function Synth({
   );
 }
 
-/**
- * Hook to access synth configuration from within Note/Chord components
- */
 export function useSynth() {
   const ctx = useContext(SynthContext);
   return ctx ?? DEFAULT_SYNTH_CONFIG;

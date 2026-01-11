@@ -95,9 +95,6 @@ export function Track({ bpm, children }: TrackProps) {
   );
 }
 
-/**
- * Hook to access the track context from child components
- */
 export function useTrack(): TrackContextValue {
   const ctx = useContext(TrackContext);
   if (!ctx) {
@@ -106,9 +103,6 @@ export function useTrack(): TrackContextValue {
   return ctx;
 }
 
-/**
- * Hook to access the scheduling context from Note components
- */
 export function useScheduleNote(): ScheduleNoteContextValue {
   const ctx = useContext(ScheduleNoteContext);
   if (!ctx) {

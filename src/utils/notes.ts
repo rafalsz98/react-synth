@@ -2,43 +2,10 @@ import { Midi, Note } from "tonal";
 import { Chord as TonalChord } from "tonal";
 import type { NoteName } from "../types/music.ts";
 
-/**
- * Convert MIDI note number to frequency in Hz
- *
- * This is used for Sonic Pi compatibility where parameters like
- * `cutoff` are specified as MIDI note numbers (0-127+) rather than Hz.
- *
- * Formula: frequency = 440 * 2^((midi - 69) / 12)
- *
- * @example
- * midiToFrequency(69)  // => 440 (A4)
- * midiToFrequency(60)  // => 261.63 (C4)
- * midiToFrequency(100) // => 2637.02
- * midiToFrequency(110) // => 4698.64
- *
- * Sonic Pi cutoff reference:
- * - cutoff: 60  => ~262 Hz
- * - cutoff: 80  => ~831 Hz
- * - cutoff: 100 => ~2637 Hz
- * - cutoff: 110 => ~4699 Hz
- * - cutoff: 120 => ~8372 Hz
- */
 export function midiToFrequency(midi: number): number {
   return Midi.midiToFreq(midi);
 }
 
-/**
- * Convert note name to frequency using Tonal
- * Supports all note formats: "A4", "C#3", "Db5", "Bb2", etc.
- *
- * Accepts both strongly-typed NoteName and plain strings (for internal use
- * by Chord component which resolves chord names to note strings at runtime).
- *
- * @example
- * noteToFrequency("A4")  // => 440
- * noteToFrequency("C4")  // => 261.63
- * noteToFrequency("C#3") // => 138.59
- */
 export function noteToFrequency(note: NoteName | string): number {
   const freq = Note.freq(note);
   if (freq === null) {
@@ -48,14 +15,6 @@ export function noteToFrequency(note: NoteName | string): number {
   return freq;
 }
 
-/**
- * Resolves chord input to an array of note names or frequencies
- *
- * @example
- * resolveChordNotes("Cmaj7")      // => ["C3", "E3", "G3", "B3"]
- * resolveChordNotes("Am:4")       // => ["A4", "C5", "E5"]
- * resolveChordNotes(["C4", "E4"]) // => ["C4", "E4"]
- */
 export function resolveChordNotes(
   notes: string | (string | number)[],
 ): (string | number)[] {

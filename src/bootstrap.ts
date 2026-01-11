@@ -1,7 +1,3 @@
-/**
- * Bootstrap React in Deno/Node.js environment
- * Creates a fake DOM so react-dom can work
- */
 import { JSDOM } from "jsdom";
 import React from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -17,11 +13,6 @@ const dom = new JSDOM('<!DOCTYPE html><div id="root"></div>');
 
 let root: Root | null = null;
 
-/**
- * Render a React component as a synth
- * The component tree will be rendered to a fake DOM,
- * but useEffect hooks will trigger real audio
- */
 export function renderSynth(Component: React.FC): void {
   const container = document.getElementById("root")!;
 

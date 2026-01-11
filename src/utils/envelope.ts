@@ -1,7 +1,3 @@
-/**
- * ADSR Envelope utilities for Web Audio
- */
-
 export interface ADSRProps {
   /** Attack time in beats - time from silence to attack_level (default: 0) */
   attack?: number;
@@ -28,9 +24,6 @@ export const ADSR_DEFAULTS = {
   release: 1,
 } as const;
 
-/**
- * Apply ADSR envelope to a GainNode and return the end time
- */
 export function applyADSREnvelope(
   gainNode: GainNode,
   audioTime: number,

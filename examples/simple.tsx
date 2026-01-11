@@ -1,8 +1,3 @@
-/**
- * Simple Example - A basic melody to test React Synth
- *
- * This demonstrates the lookahead scheduler for sample-accurate timing.
- */
 import { Chord } from "../src/components/Chord.tsx";
 import {
   Loop,

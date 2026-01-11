@@ -1,15 +1,5 @@
-/**
- * Synth presets inspired by Sonic Pi's synthesizer definitions
- *
- * Each preset defines oscillator type, filter settings, and voice configuration
- * to create distinct sonic characteristics.
- */
-
 import type { SynthConfig, SynthType } from "./types.ts";
 
-/**
- * Synth presets mapped by type name
- */
 export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
   /**
    * Pure sine wave - clean, fundamental tone
@@ -100,14 +90,8 @@ export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
   },
 };
 
-/**
- * Get a synth preset by type name
- */
 export function getSynthPreset(type: SynthType): SynthConfig {
   return SYNTH_PRESETS[type];
 }
 
-/**
- * Default synth configuration (sine wave, no filtering)
- */
 export const DEFAULT_SYNTH_CONFIG: SynthConfig = SYNTH_PRESETS.sine;

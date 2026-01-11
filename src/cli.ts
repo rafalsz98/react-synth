@@ -1,8 +1,3 @@
-/**
- * React Synth CLI
- *
- * Usage: deno run --allow-read --allow-env --allow-sys src/cli.ts <song.tsx>
- */
 import { resolve, toFileUrl } from "@std/path";
 import { renderSynth } from "./bootstrap.ts";
 
