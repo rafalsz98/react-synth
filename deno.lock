@@ -8,6 +8,7 @@
     "npm:node-web-audio-api@^1.0.7": "1.0.7",
     "npm:react-dom@19": "19.2.3_react@19.2.3",
     "npm:react@19": "19.2.3",
+    "npm:react@^19.2.3": "19.2.3",
     "npm:tonal@^6.4.2": "6.4.2"
   },
   "jsr": {
@@ -746,13 +747,27 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/path@1",
-      "npm:@types/react@19",
-      "npm:jsdom@24",
-      "npm:node-web-audio-api@^1.0.7",
-      "npm:react-dom@19",
-      "npm:react@19",
-      "npm:tonal@^6.4.2"
-    ]
+      "npm:react@^19.2.3"
+    ],
+    "members": {
+      "packages/cli": {
+        "dependencies": [
+          "jsr:@std/path@1",
+          "npm:@types/react@19",
+          "npm:jsdom@24",
+          "npm:react-dom@19",
+          "npm:react@19"
+        ]
+      },
+      "packages/synth": {
+        "dependencies": [
+          "npm:@types/react@19",
+          "npm:node-web-audio-api@^1.0.7",
+          "npm:react-dom@19",
+          "npm:react@19",
+          "npm:tonal@^6.4.2"
+        ]
+      }
+    }
   }
 }

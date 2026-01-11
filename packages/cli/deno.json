@@ -1,8 +1,22 @@
 {
   "name": "@react-synth/cli",
-  "version": "0.0.2-alpha",
+  "version": "0.0.3-alpha",
   "license": "MIT",
   "exports": {
     ".": "./cli.ts"
+  },
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "lib": ["deno.window", "dom"]
+  },
+  "imports": {
+    "@std/path": "jsr:@std/path@1",
+    "@types/react": "npm:@types/react@19",
+    "react": "npm:react@19",
+    "react-dom": "npm:react-dom@19",
+    "react-dom/client": "npm:react-dom@19/client",
+    "react/jsx-runtime": "npm:react@19/jsx-runtime",
+    "jsdom": "npm:jsdom@24"
   }
 }
