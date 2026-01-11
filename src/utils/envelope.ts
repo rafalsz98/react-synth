@@ -1,4 +1,4 @@
-export interface ADSRProps {
+export type ADSRProps = {
   /** Attack time in beats - time from silence to attack_level (default: 0) */
   attack?: number;
   /** Peak amplitude at end of attack, multiplied by amp (default: 1) */
@@ -13,7 +13,7 @@ export interface ADSRProps {
   sustain_level?: number;
   /** Release time in beats - time from sustain_level to silence (default: 1) */
   release?: number;
-}
+};
 
 export const ADSR_DEFAULTS = {
   attack: 0,
