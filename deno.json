@@ -1,6 +1,6 @@
 {
   "name": "@react-synth/synth",
-  "version": "0.1.0",
+  "version": "0.0.1-alpha",
   "exports": {
     ".": "./src/components/index.ts",
     "./cli": "./src/cli.ts"
