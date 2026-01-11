@@ -1,0 +1,26 @@
+{
+  "name": "@synth/synth",
+  "version": "0.1.0",
+  "exports": "./src/components/index.ts",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "tasks": {
+    "dev": "deno run --allow-read --allow-env --allow-sys --allow-ffi src/cli.ts examples/simple.tsx",
+    "play": "deno run --allow-read --allow-env --allow-sys --allow-ffi src/cli.ts",
+    "test": "deno run --allow-ffi --allow-read --watch examples/test.ts"
+  },
+  "imports": {
+    "@std/path": "jsr:@std/path@1",
+    "@types/react": "npm:@types/react@19",
+    "node-web-audio-api": "npm:node-web-audio-api@^1.0.7",
+    "react": "npm:react@19",
+    "react-dom": "npm:react-dom@19",
+    "react-dom/client": "npm:react-dom@19/client",
+    "react/jsx-runtime": "npm:react@19/jsx-runtime",
+    "jsdom": "npm:jsdom@24",
+    "tonal": "npm:tonal@^6.4.2"
+  },
+  "nodeModulesDir": "auto"
+}
