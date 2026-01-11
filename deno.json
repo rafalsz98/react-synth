@@ -5,8 +5,8 @@
     "jsxImportSource": "react"
   },
   "tasks": {
-    "dev": "deno run --allow-read --allow-env --allow-sys --allow-ffi src/cli.ts examples/simple.tsx",
-    "play": "deno run --allow-read --allow-env --allow-sys --allow-ffi src/cli.ts",
+    "dev": "deno run --allow-read --allow-env --allow-sys --allow-ffi packages/cli/cli.ts examples/simple.tsx",
+    "play": "deno run --allow-read --allow-env --allow-sys --allow-ffi packages/cli/cli.ts",
     "test": "deno run --allow-ffi --allow-read --watch examples/test.ts"
   },
   "imports": {

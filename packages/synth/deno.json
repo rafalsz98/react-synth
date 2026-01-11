@@ -1,8 +1,8 @@
 {
   "name": "@react-synth/synth",
-  "version": "0.0.1-alpha",
+  "version": "0.0.2-alpha",
   "license": "MIT",
   "exports": {
-    ".": "./../../src/components/index.ts"
+    ".": "./src/components/index.ts"
   }
 }
