@@ -59,7 +59,7 @@ type TrackProps = {
  *   </Loop>
  * </Track>
  */
-export function Track({ bpm, children }: TrackProps) {
+export function Track({ bpm, children }: TrackProps): ReactNode {
   const scheduler = useRef<Scheduler>(getScheduler(bpm));
   const audioContext = scheduler.current.audioContext;
 

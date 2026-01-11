@@ -30,7 +30,7 @@ export function Loop({
   id,
   interval,
   children,
-}: LoopProps) {
+}: LoopProps): ReactNode {
   const { scheduler } = useTrack();
   const callbacksRef = useRef<Map<string, ScheduleCallback>>(new Map());
 

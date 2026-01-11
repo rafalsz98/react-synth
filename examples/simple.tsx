@@ -1,13 +1,13 @@
-import { Chord } from "../src/components/Chord.tsx";
 import {
+  Chord,
   Loop,
   Note,
+  NoteName,
   Sample,
   Sequence,
   Synth,
   Track,
-} from "../src/components/index.ts";
-import type { NoteName } from "../src/types/music.ts";
+} from "@react-synth/synth";
 
 export default function SimpleSong() {
   const patterns: [string, string, string, string][] = [
@@ -23,7 +23,8 @@ export default function SimpleSong() {
         <Sample name="bd_haus" amp={2} cutoff={100} />
       </Loop>
 
-      <Loop id="click" interval={2}>
+      {
+        /* <Loop id="click" interval={2}>
         <Sequence interval={0.25}>
           {[...Array(4)].map((_, i) => (
             <Sample
@@ -83,7 +84,8 @@ export default function SimpleSong() {
       </Loop>
       <Loop id="test" interval={2}>
         <Chord notes={["A##2", "F1", "C4"]} amp={1} />
-      </Loop>
+      </Loop> */
+      }
     </Track>
   );
 }

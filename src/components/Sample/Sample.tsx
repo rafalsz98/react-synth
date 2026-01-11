@@ -1,4 +1,4 @@
-import { useEffect, useId } from "react";
+import { type ReactNode, useEffect, useId } from "react";
 import { useScheduleNote, useTrack } from "../Track.tsx";
 import { loadSample } from "../../audio/sampleLoader.ts";
 import type { SampleName } from "../../types/music.ts";
@@ -45,7 +45,7 @@ export function Sample({
   rate = 1,
   pan = 0,
   __stepIndex,
-}: SampleProps) {
+}: SampleProps): ReactNode {
   const uniqueId = useId();
   const { audioContext } = useTrack();
   const scheduleNote = useScheduleNote();

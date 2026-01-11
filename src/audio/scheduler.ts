@@ -13,10 +13,8 @@ type ScheduledEvent = {
   active: boolean;
 };
 
-declare global {
-  var __scheduler: Scheduler | undefined;
-  var __audioContext: AudioContextType | undefined;
-}
+let schedulerInstance: Scheduler | undefined;
+let audioContextInstance: AudioContextType | undefined;
 
 export class Scheduler {
   private context: AudioContextType;
@@ -30,10 +28,10 @@ export class Scheduler {
   private readonly scheduleInterval = 25;
 
   constructor(bpm: number) {
-    if (!globalThis.__audioContext) {
-      globalThis.__audioContext = new AudioContext();
+    if (!audioContextInstance) {
+      audioContextInstance = new AudioContext();
     }
-    this.context = globalThis.__audioContext;
+    this.context = audioContextInstance;
     this._bpm = bpm;
     this.startTime = this.context.currentTime;
   }
@@ -174,19 +172,19 @@ export class Scheduler {
 }
 
 export function getScheduler(bpm: number): Scheduler {
-  if (!globalThis.__scheduler) {
-    globalThis.__scheduler = new Scheduler(bpm);
+  if (!schedulerInstance) {
+    schedulerInstance = new Scheduler(bpm);
   } else {
-    globalThis.__scheduler.bpm = bpm;
+    schedulerInstance.bpm = bpm;
   }
-  return globalThis.__scheduler;
+  return schedulerInstance;
 }
 
 export function resetScheduler(bpm: number): Scheduler {
-  if (globalThis.__scheduler) {
-    globalThis.__scheduler.stop();
-    globalThis.__scheduler.clear();
+  if (schedulerInstance) {
+    schedulerInstance.stop();
+    schedulerInstance.clear();
   }
-  globalThis.__scheduler = new Scheduler(bpm);
-  return globalThis.__scheduler;
+  schedulerInstance = new Scheduler(bpm);
+  return schedulerInstance;
 }

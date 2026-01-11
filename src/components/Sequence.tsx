@@ -39,7 +39,7 @@ export function Sequence({
   interval,
   children,
   __stepIndex,
-}: SequenceProps) {
+}: SequenceProps): ReactNode {
   const uniqueId = useId();
   const { scheduler } = useTrack();
   const { scheduleNote, unscheduleNote } = useScheduleNote();

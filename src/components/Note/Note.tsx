@@ -1,4 +1,4 @@
-import { useEffect, useId } from "react";
+import { type ReactNode, useEffect, useId } from "react";
 import { useScheduleNote, useTrack } from "../Track.tsx";
 import {
   ADSR_DEFAULTS,
@@ -51,7 +51,7 @@ export function Note({
   sustain_level = ADSR_DEFAULTS.sustain_level,
   release = ADSR_DEFAULTS.release,
   __stepIndex,
-}: NoteProps) {
+}: NoteProps): ReactNode {
   const uniqueId = useId();
   const { audioContext, scheduler } = useTrack();
   const scheduleNote = useScheduleNote();
