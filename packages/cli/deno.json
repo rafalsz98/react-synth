@@ -1,0 +1,8 @@
+{
+  "name": "@react-synth/cli",
+  "version": "0.0.1-alpha",
+  "license": "MIT",
+  "exports": {
+    ".": "./../../src/cli.ts"
+  }
+}
