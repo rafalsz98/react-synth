@@ -9,11 +9,7 @@ if (!filePath) {
 🎹 React Synth - Live coding music with React
 
 Usage: 
-  deno task play <song.tsx>     Run a song once
-  deno task dev                 Run with hot reload
-
-Example:
-  deno task play examples/simple.tsx
+  synth <song.tsx>     Run a song with hot reload
 `);
   Deno.exit(0);
 }
