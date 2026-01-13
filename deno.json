@@ -4,7 +4,8 @@
   "license": "MIT",
   "exports": {
     ".": "./src/index.ts",
-    "./samples/*": "./src/samples/*"
+    "./samples/bd_haus.flac": "./src/samples/bd_haus.flac",
+    "./samples/drum_cymbal_closed.flac": "./src/samples/drum_cymbal_closed.flac"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
