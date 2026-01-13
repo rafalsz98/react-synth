@@ -1,4 +1,5 @@
 import {
+  type Context,
   createContext,
   type ReactNode,
   useContext,
@@ -23,7 +24,7 @@ export type ScheduleNoteContextValue = {
   scheduleNote: (
     id: string,
     callback: ScheduleCallback,
-    stepIndex?: number,
+    stepIndex?: number
   ) => void;
 
   /**
@@ -33,9 +34,8 @@ export type ScheduleNoteContextValue = {
   unscheduleNote: (id: string) => void;
 };
 
-export const ScheduleNoteContext = createContext<
-  ScheduleNoteContextValue | null
->(null);
+export const ScheduleNoteContext: Context<ScheduleNoteContextValue | null> =
+  createContext<ScheduleNoteContextValue | null>(null);
 
 type TrackContextValue = {
   audioContext: AudioContextType;
@@ -78,7 +78,7 @@ export function Track({ bpm, children }: TrackProps): ReactNode {
         // Nothing to clean up for one-shot playback
       },
     }),
-    [audioContext],
+    [audioContext]
   );
 
   return (
