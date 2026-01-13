@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "tasks": {
+    "play": "deno run --watch --allow-all simple.tsx"
+  },
+  "imports": {
+    "@react-synth/synth": "jsr:@react-synth/synth@0.0.4-alpha",
+    "react": "npm:react@19",
+    "react/jsx-runtime": "npm:react@19/jsx-runtime"
+  }
+}

@@ -3,13 +3,14 @@ import {
   Loop,
   Note,
   NoteName,
+  playSong,
   Sample,
   Sequence,
   Synth,
   Track,
 } from "@react-synth/synth";
 
-export default function SimpleSong() {
+function SimpleSong() {
   const patterns: [string, string, string, string][] = [
     ["A1", "A2", "E2", "A2"], // a1: root, +12, +7, +12
     ["G1", "G2", "D2", "G2"], // g1: root, +12, +7, +12
@@ -23,8 +24,7 @@ export default function SimpleSong() {
         <Sample name="bd_haus" amp={2} cutoff={100} />
       </Loop>
 
-      {
-        /* <Loop id="click" interval={2}>
+      {/* <Loop id="click" interval={2}>
         <Sequence interval={0.25}>
           {[...Array(4)].map((_, i) => (
             <Sample
@@ -84,8 +84,9 @@ export default function SimpleSong() {
       </Loop>
       <Loop id="test" interval={2}>
         <Chord notes={["A##2", "F1", "C4"]} amp={1} />
-      </Loop> */
-      }
+      </Loop> */}
     </Track>
   );
 }
+
+playSong(<SimpleSong />);

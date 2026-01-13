@@ -1,24 +1,21 @@
 {
   "name": "@react-synth/synth",
-  "version": "0.0.4-alpha",
+  "version": "0.0.5-alpha",
   "license": "MIT",
   "exports": {
-    ".": "./src/components/index.ts",
-    "./cli": "./cli/cli.ts"
+    ".": "./src/index.ts"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
   "tasks": {
-    "dev": "deno run --allow-read --allow-env --allow-sys --allow-ffi cli/cli.ts examples/simple.tsx",
-    "play": "deno run --allow-read --allow-env --allow-sys --allow-ffi cli/cli.ts",
+    "dev": "deno run --watch --allow-all examples/simple/simple.tsx",
     "test": "deno run --allow-ffi --allow-read --watch examples/test.ts"
   },
   "nodeModulesDir": "auto",
   "imports": {
-    "@react-synth/synth": "./src/components/index.ts",
-    "@std/path": "jsr:@std/path@1",
+    "@react-synth/synth": "./src/index.ts",
     "react": "npm:react@19",
     "@types/react": "npm:@types/react@19",
     "react-dom": "npm:react-dom@19",
