@@ -1,6 +1,6 @@
 {
   "name": "@react-synth/synth",
-  "version": "0.0.7-alpha",
+  "version": "0.1.0-alpha",
   "description": "Live coding music with React",
   "license": "MIT",
   "type": "module",
