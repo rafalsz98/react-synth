@@ -21,18 +21,18 @@ npm run dev examples/simple/simple.tsx
 Write music using React components:
 
 ```tsx
+// song.tsx
 import {
   Chord,
   Loop,
   Note,
-  playSong,
   Sample,
   Sequence,
   Synth,
   Track,
 } from "@react-synth/synth";
 
-function MySong() {
+export default function MySong() {
   return (
     <Track bpm={120}>
       {/* Simple kick drum pattern */}
@@ -61,8 +61,12 @@ function MySong() {
     </Track>
   );
 }
+```
 
-playSong(<MySong />);
+Then run it with:
+
+```bash
+npx react-synth song.tsx
 ```
 
 ## Components
@@ -156,7 +160,6 @@ npm run dev examples/simple/simple.tsx
 react-synth/
 ├── src/
 │   ├── index.ts            # Main exports
-│   ├── play.ts             # playSong function
 │   ├── audio/
 │   │   ├── scheduler.ts    # Beat scheduling
 │   │   └── sampleLoader.ts # Audio sample loading
@@ -170,14 +173,12 @@ react-synth/
 │   │   └── Sequence.tsx    # Sequential playback
 │   ├── types/
 │   │   └── music.ts        # Type definitions
-│   ├── utils/
-│   │   ├── envelope.ts     # ADSR envelope
-│   │   ├── line.ts         # Value interpolation
-│   │   └── notes.ts        # Note/chord utilities
-│   └── samples/            # Audio samples
+│   └── utils/
+│       ├── envelope.ts     # ADSR envelope
+│       ├── line.ts         # Value interpolation
+│       └── notes.ts        # Note/chord utilities
 ├── cli/
-│   ├── cli.ts              # CLI entry point
-│   └── bootstrap.ts        # React + JSDOM setup
+│   └── cli.ts              # CLI entry point (includes React + JSDOM setup)
 ├── examples/
 │   └── simple/
 │       └── simple.tsx      # Demo song

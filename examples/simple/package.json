@@ -11,7 +11,6 @@
     "jsdom": "^25.0.1",
     "node-web-audio-api": "^1.0.7",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "tonal": "^6.4.2"
+    "react-dom": "^19.2.3"
   }
 }

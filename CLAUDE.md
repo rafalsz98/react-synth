@@ -28,10 +28,9 @@ deno task test
 ### Data Flow
 
 ```
-CLI (src/cli.ts)
-  ↓ loads/watches TSX file
-Bootstrap (src/bootstrap.ts)
-  ↓ creates fake DOM via JSDOM, renders React
+CLI (cli/cli.ts)
+  ↓ loads/watches TSX file, creates fake DOM via JSDOM
+  ↓ auto-renders default export using React
 Components render to scheduler callbacks
   ↓
 Scheduler (src/audio/scheduler.ts)
@@ -75,8 +74,7 @@ Each component provides a context consumed by children via hooks:
 
 ## Key Files
 
-- `src/cli.ts` - Entry point, file watching, cache-busting on reload
-- `src/bootstrap.ts` - JSDOM setup, React rendering to fake DOM
+- `cli/cli.ts` - Entry point, file watching, JSDOM setup, React rendering
 - `src/audio/scheduler.ts` - Core two-clock lookahead scheduler (owns
   AudioContext)
 - `src/components/Track.tsx` - Root component, initializes scheduler

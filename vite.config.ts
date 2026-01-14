@@ -31,9 +31,7 @@ export default defineConfig({
         "react/jsx-runtime",
         "node-web-audio-api",
         "jsdom",
-        "tonal",
-        "chokidar",
-        "esbuild",
+        "vite",
         "path",
         "url",
         "fs",
@@ -41,7 +39,6 @@ export default defineConfig({
         "os",
         "crypto",
         "module",
-        // CLI imports from the package - this ensures shared scheduler instance
         "@react-synth/synth",
       ],
       output: {

@@ -11,6 +11,8 @@ type ScheduledEvent = {
   intervalBeats: number;
   callback: ScheduleCallback;
   active: boolean;
+  /** Timestamp when the loop was marked for removal (for grace period during HMR) */
+  pendingRemoval?: number;
 };
 
 let schedulerInstance: Scheduler | undefined;
@@ -26,6 +28,8 @@ export class Scheduler {
 
   private readonly lookahead = 0.1;
   private readonly scheduleInterval = 25;
+  /** Grace period before actually removing a loop - allows React HMR to re-add it */
+  private readonly removalGracePeriod = 100;
 
   constructor(bpm: number) {
     if (!audioContextInstance) {
@@ -85,6 +89,18 @@ export class Scheduler {
     callback: ScheduleCallback,
     startBeat?: number,
   ): void {
+    const existing = this.events.get(id);
+
+    // HMR optimization: if loop exists (even if pending removal), update in-place
+    // This preserves timing across hot reloads
+    if (existing && existing.intervalBeats === intervalBeats) {
+      existing.callback = callback;
+      existing.active = true;
+      existing.pendingRemoval = undefined; // Cancel pending removal
+      // console.debug(`[scheduler] loop "${id}" updated (HMR)`);
+      return;
+    }
+
     const currentBeat = this.getCurrentBeat();
     let nextBeat: number;
 
@@ -114,8 +130,12 @@ export class Scheduler {
   }
 
   remove(id: string): void {
-    if (this.events.delete(id)) {
-      console.debug(`[scheduler] event "${id}" removed`);
+    const event = this.events.get(id);
+    if (event) {
+      // Don't remove immediately - mark for removal with grace period
+      // This allows React's HMR unmount/remount cycle to re-add the loop
+      // and preserve its timing
+      event.pendingRemoval = Date.now();
     }
   }
 
@@ -142,8 +162,11 @@ export class Scheduler {
     const currentAudioTime = this.context.currentTime;
     const currentBeat = this.getCurrentBeat();
     const scheduleUntilBeat = currentBeat + this.secondsToBeats(this.lookahead);
+    const now = Date.now();
 
     for (const event of this.events.values()) {
+      // Skip events pending removal
+      if (event.pendingRemoval !== undefined) continue;
       if (!event.active) continue;
 
       while (event.nextBeatTime < scheduleUntilBeat) {
@@ -162,10 +185,16 @@ export class Scheduler {
       }
     }
 
-    // Clean up inactive one-shot events
+    // Clean up events
     for (const [id, event] of this.events) {
       if (!event.active && event.intervalBeats === 0) {
         this.events.delete(id);
+      } else if (
+        event.pendingRemoval !== undefined &&
+        now - event.pendingRemoval > this.removalGracePeriod
+      ) {
+        this.events.delete(id);
+        console.debug(`[scheduler] loop "${id}" removed`);
       }
     }
   }

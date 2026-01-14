@@ -3,15 +3,15 @@ import {
   Loop,
   Note,
   NoteName,
-  playSong,
   Sample,
   Sequence,
   Synth,
   Track,
 } from "@react-synth/synth";
 import React from "react";
+import { Giorgio } from "./component";
 
-function SimpleSong() {
+export default function SimpleSong() {
   const patterns: [string, string, string, string][] = [
     ["A1", "A2", "E2", "A2"], // a1: root, +12, +7, +12
     ["G1", "G2", "D2", "G2"], // g1: root, +12, +7, +12
@@ -22,12 +22,11 @@ function SimpleSong() {
   return (
     <Track bpm={113}>
       <Loop id="kick" interval={1}>
-        <Sample name="bd_haus" amp={2} cutoff={100} />
+        <Sample name="bd_haus" amp={0.5} cutoff={100} />
         {/* <Chord notes={["A5"]} amp={1} /> */}
       </Loop>
 
-      {
-        /* <Loop id="click" interval={2}>
+      <Loop id="click" interval={2}>
         <Sequence interval={0.25}>
           {[...Array(4)].map((_, i) => (
             <Sample
@@ -41,7 +40,10 @@ function SimpleSong() {
         </Sequence>
       </Loop>
 
-      <Loop id="giorgio_arp" interval={16}>
+      <Giorgio />
+
+      {
+        /* <Loop id="giorgio_arp" interval={16}>
         <Synth type="prophet">
           <Sequence interval={4}>
             {patterns.map((pattern, idx) => (
@@ -73,7 +75,8 @@ function SimpleSong() {
             ))}
           </Sequence>
         </Synth>
-      </Loop>
+      </Loop> */
+      }
 
       <Loop id="pads" interval={16}>
         <Synth type="hollow">
@@ -85,12 +88,11 @@ function SimpleSong() {
           </Sequence>
         </Synth>
       </Loop>
-      <Loop id="test" interval={2}>
+      {
+        /* <Loop id="test" interval={2}>
         <Chord notes={["A##2", "F1", "C4"]} amp={1} />
       </Loop> */
       }
     </Track>
   );
 }
-
-playSong(<SimpleSong />);
