@@ -1,20 +1,9 @@
 # React Synth 🎹
 
-Transform React code into music! A live coding synthesizer powered by Node.js
-and React.
+This is a fun little experiment showing that React API can be used outside of
+browser environment to render... music instead of HTML.
 
-## Quick Start
-
-```bash
-# Install dependencies
-npm install
-
-# Build the library
-npm run build
-
-# Play a song with hot reload
-npm run dev examples/simple/simple.tsx
-```
+Should you use it? I don't know, you are an adult.
 
 ## How It Works
 
