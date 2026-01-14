@@ -1,5 +1,5 @@
 {
-  "name": "@react-synth/synth",
+  "name": "react-synth",
   "version": "0.0.7-alpha",
   "description": "Live coding music with React",
   "license": "MIT",
