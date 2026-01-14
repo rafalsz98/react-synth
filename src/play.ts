@@ -29,7 +29,7 @@ let root: Root | null = null;
  * );
  * ```
  *
- * Run with hot reload: `deno run --watch --allow-all song.tsx`
+ * Run with hot reload: `npx react-synth song.tsx`
  */
 export function playSong(track: ReactNode): void {
   const container = document.getElementById("root")!;

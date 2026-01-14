@@ -13,8 +13,8 @@ import {
   type ScheduleNoteContextValue,
   useScheduleNote,
   useTrack,
-} from "./Track.tsx";
-import type { ScheduleCallback } from "../audio/scheduler.ts";
+} from "./Track";
+import type { ScheduleCallback } from "../audio/scheduler";
 
 type SequenceProps = {
   /** Time interval between each child in beats */

@@ -3,8 +3,8 @@ import {
   ScheduleNoteContext,
   type ScheduleNoteContextValue,
   useTrack,
-} from "./Track.tsx";
-import type { ScheduleCallback } from "../audio/scheduler.ts";
+} from "./Track";
+import type { ScheduleCallback } from "../audio/scheduler";
 
 type LoopProps = {
   /** Unique identifier for this loop */

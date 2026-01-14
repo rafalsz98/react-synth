@@ -1,5 +1,5 @@
-import type { CutoffType } from "../components/Synth/types.ts";
-import { midiToFrequency } from "./notes.ts";
+import type { CutoffType } from "../components/Synth/types";
+import { midiToFrequency } from "./notes";
 
 /** Generate an array of linearly interpolated values */
 export function line(start: number, end: number, steps: number): number[] {

@@ -1,3 +1,3 @@
-export * from "./Synth.tsx";
-export * from "./types.ts";
-export * from "./presets.ts";
+export * from "./Synth";
+export * from "./types";
+export * from "./presets";

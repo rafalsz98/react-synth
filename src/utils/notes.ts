@@ -1,6 +1,6 @@
 import { Midi, Note } from "tonal";
 import { Chord as TonalChord } from "tonal";
-import type { NoteName } from "../types/music.ts";
+import type { NoteName } from "../types/music";
 
 export function midiToFrequency(midi: number): number {
   return Midi.midiToFreq(midi);

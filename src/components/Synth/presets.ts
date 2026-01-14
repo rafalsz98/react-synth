@@ -1,4 +1,4 @@
-import type { SynthConfig, SynthType } from "./types.ts";
+import type { SynthConfig, SynthType } from "./types";
 
 export const SYNTH_PRESETS: Record<SynthType, SynthConfig> = {
   /**

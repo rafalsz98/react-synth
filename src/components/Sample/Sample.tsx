@@ -1,9 +1,9 @@
 import { type ReactNode, useEffect, useId } from "react";
-import { useScheduleNote, useTrack } from "../Track.tsx";
-import { loadSample } from "../../audio/sampleLoader.ts";
-import type { SampleName } from "../../types/music.ts";
-import type { CutoffType } from "../Synth/types.ts";
-import { resolveCutoff } from "../../utils/line.ts";
+import { useScheduleNote, useTrack } from "../Track";
+import { loadSample } from "../../audio/sampleLoader";
+import type { SampleName } from "../../types/music";
+import type { CutoffType } from "../Synth/types";
+import { resolveCutoff } from "../../utils/line";
 
 type SampleProps = {
   /** Sample name (without extension, e.g., "bd_haus") */

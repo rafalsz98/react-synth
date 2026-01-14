@@ -9,6 +9,7 @@ import {
   Synth,
   Track,
 } from "@react-synth/synth";
+import React from "react";
 
 function SimpleSong() {
   const patterns: [string, string, string, string][] = [
@@ -22,9 +23,11 @@ function SimpleSong() {
     <Track bpm={113}>
       <Loop id="kick" interval={1}>
         <Sample name="bd_haus" amp={2} cutoff={100} />
+        {/* <Chord notes={["A5"]} amp={1} /> */}
       </Loop>
 
-      {/* <Loop id="click" interval={2}>
+      {
+        /* <Loop id="click" interval={2}>
         <Sequence interval={0.25}>
           {[...Array(4)].map((_, i) => (
             <Sample
@@ -84,7 +87,8 @@ function SimpleSong() {
       </Loop>
       <Loop id="test" interval={2}>
         <Chord notes={["A##2", "F1", "C4"]} amp={1} />
-      </Loop> */}
+      </Loop> */
+      }
     </Track>
   );
 }

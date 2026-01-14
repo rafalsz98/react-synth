@@ -11,7 +11,7 @@ import {
   getScheduler,
   type ScheduleCallback,
   type Scheduler,
-} from "../audio/scheduler.ts";
+} from "../audio/scheduler";
 import type { AudioContext as AudioContextType } from "node-web-audio-api";
 
 export type ScheduleNoteContextValue = {
@@ -24,7 +24,7 @@ export type ScheduleNoteContextValue = {
   scheduleNote: (
     id: string,
     callback: ScheduleCallback,
-    stepIndex?: number
+    stepIndex?: number,
   ) => void;
 
   /**
@@ -78,7 +78,7 @@ export function Track({ bpm, children }: TrackProps): ReactNode {
         // Nothing to clean up for one-shot playback
       },
     }),
-    [audioContext]
+    [audioContext],
   );
 
   return (

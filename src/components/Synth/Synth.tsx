@@ -1,6 +1,6 @@
 import { createContext, type ReactNode, useContext, useMemo } from "react";
-import type { SynthConfig, SynthOverrides, SynthType } from "./types.ts";
-import { DEFAULT_SYNTH_CONFIG, getSynthPreset } from "./presets.ts";
+import type { SynthConfig, SynthOverrides, SynthType } from "./types";
+import { DEFAULT_SYNTH_CONFIG, getSynthPreset } from "./presets";
 
 const SynthContext = createContext<SynthConfig | null>(null);
 

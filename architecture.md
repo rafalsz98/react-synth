@@ -1,7 +1,7 @@
 # React Synth
 
-This is an deno application, that transforms React code into music. It loops the
-whole track over in live mode, allowing for hot reload (using React API)
+This is a Node.js application, that transforms React code into music. It loops
+the whole track over in live mode, allowing for hot reload (using React API)
 
 Conceptually, this is very simillar to `sonic-pi`, therefore its interface is
 compatible with sonic-pi. What is possible there, must be possible in React
