@@ -13,8 +13,8 @@ import {
   type ScheduleNoteContextValue,
   useScheduleNote,
   useTrack,
-} from "./Track.tsx";
-import type { ScheduleCallback } from "../audio/scheduler.ts";
+} from "./Track";
+import type { ScheduleCallback } from "../audio/scheduler";
 
 type SequenceProps = {
   /** Time interval between each child in beats */
@@ -39,7 +39,7 @@ export function Sequence({
   interval,
   children,
   __stepIndex,
-}: SequenceProps) {
+}: SequenceProps): ReactNode {
   const uniqueId = useId();
   const { scheduler } = useTrack();
   const { scheduleNote, unscheduleNote } = useScheduleNote();

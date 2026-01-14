@@ -1,4 +1,5 @@
 import {
+  type Context,
   createContext,
   type ReactNode,
   useContext,
@@ -10,7 +11,7 @@ import {
   getScheduler,
   type ScheduleCallback,
   type Scheduler,
-} from "../audio/scheduler.ts";
+} from "../audio/scheduler";
 import type { AudioContext as AudioContextType } from "node-web-audio-api";
 
 export type ScheduleNoteContextValue = {
@@ -33,9 +34,8 @@ export type ScheduleNoteContextValue = {
   unscheduleNote: (id: string) => void;
 };
 
-export const ScheduleNoteContext = createContext<
-  ScheduleNoteContextValue | null
->(null);
+export const ScheduleNoteContext: Context<ScheduleNoteContextValue | null> =
+  createContext<ScheduleNoteContextValue | null>(null);
 
 type TrackContextValue = {
   audioContext: AudioContextType;
@@ -59,7 +59,7 @@ type TrackProps = {
  *   </Loop>
  * </Track>
  */
-export function Track({ bpm, children }: TrackProps) {
+export function Track({ bpm, children }: TrackProps): ReactNode {
   const scheduler = useRef<Scheduler>(getScheduler(bpm));
   const audioContext = scheduler.current.audioContext;
 

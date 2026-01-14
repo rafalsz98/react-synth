@@ -1,0 +1,16 @@
+{
+  "name": "simple-example",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx tsx ../../cli/cli.ts simple.tsx"
+  },
+  "dependencies": {
+    "@react-synth/synth": "file:../..",
+    "jsdom": "^25.0.1",
+    "node-web-audio-api": "^1.0.7",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  }
+}

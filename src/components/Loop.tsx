@@ -3,8 +3,8 @@ import {
   ScheduleNoteContext,
   type ScheduleNoteContextValue,
   useTrack,
-} from "./Track.tsx";
-import type { ScheduleCallback } from "../audio/scheduler.ts";
+} from "./Track";
+import type { ScheduleCallback } from "../audio/scheduler";
 
 type LoopProps = {
   /** Unique identifier for this loop */
@@ -30,7 +30,7 @@ export function Loop({
   id,
   interval,
   children,
-}: LoopProps) {
+}: LoopProps): ReactNode {
   const { scheduler } = useTrack();
   const callbacksRef = useRef<Map<string, ScheduleCallback>>(new Map());
 

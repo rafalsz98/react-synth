@@ -1,6 +1,6 @@
-import { createContext, useContext, useMemo } from "react";
-import type { SynthConfig, SynthOverrides, SynthType } from "./types.ts";
-import { DEFAULT_SYNTH_CONFIG, getSynthPreset } from "./presets.ts";
+import { createContext, type ReactNode, useContext, useMemo } from "react";
+import type { SynthConfig, SynthOverrides, SynthType } from "./types";
+import { DEFAULT_SYNTH_CONFIG, getSynthPreset } from "./presets";
 
 const SynthContext = createContext<SynthConfig | null>(null);
 
@@ -39,7 +39,7 @@ export function Synth({
   filter,
   voices,
   children,
-}: SynthProps) {
+}: SynthProps): ReactNode {
   // Build configuration by starting with preset and applying overrides
   const config = useMemo<SynthConfig>(() => {
     const preset = getSynthPreset(type);
@@ -66,7 +66,7 @@ export function Synth({
   );
 }
 
-export function useSynth() {
+export function useSynth(): SynthConfig {
   const ctx = useContext(SynthContext);
   return ctx ?? DEFAULT_SYNTH_CONFIG;
 }

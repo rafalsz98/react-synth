@@ -1,14 +1,14 @@
-import { useEffect, useId } from "react";
-import { useScheduleNote, useTrack } from "../Track.tsx";
+import { type ReactNode, useEffect, useId } from "react";
+import { useScheduleNote, useTrack } from "../Track";
 import {
   ADSR_DEFAULTS,
   type ADSRProps,
   applyADSREnvelope,
-} from "../../utils/envelope.ts";
-import { noteToFrequency } from "../../utils/notes.ts";
-import { resolveCutoff } from "../../utils/line.ts";
-import type { NoteName } from "../../types/music.ts";
-import { type SynthOverrides, useSynth } from "../Synth/index.ts";
+} from "../../utils/envelope";
+import { noteToFrequency } from "../../utils/notes";
+import { resolveCutoff } from "../../utils/line";
+import type { NoteName } from "../../types/music";
+import { type SynthOverrides, useSynth } from "../Synth";
 
 type NoteProps =
   & ADSRProps
@@ -51,7 +51,7 @@ export function Note({
   sustain_level = ADSR_DEFAULTS.sustain_level,
   release = ADSR_DEFAULTS.release,
   __stepIndex,
-}: NoteProps) {
+}: NoteProps): ReactNode {
   const uniqueId = useId();
   const { audioContext, scheduler } = useTrack();
   const scheduleNote = useScheduleNote();
