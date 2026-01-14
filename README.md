@@ -7,10 +7,20 @@ Should you use it? I don't know, you are an adult.
 
 ## How It Works
 
-Write music using React components:
+Init new repository and install react-synth and its dependencies:
+
+```bash
+npm init
+npm i @react-synth/synth react
+npm i -D @types/react
+```
+
+Then create new `.tsx` file. React-synth requires created file to have default
+export with ReactNode. For example, you can paste below code:
 
 ```tsx
 // song.tsx
+import React from "react";
 import {
   Chord,
   Loop,
@@ -58,129 +68,293 @@ Then run it with:
 npx react-synth song.tsx
 ```
 
+Now any change made to the code will cause hot reload without disruption.
+
 ## Components
 
-### `<Track bpm={number}>`
+### `<Track>`
 
-Root component that sets the tempo and provides audio context.
+Root component that sets the tempo and provides audio context. All other
+components must be nested inside a Track.
 
-### `<Loop id={string} interval={number}>`
+| Prop       | Type        | Default | Description                             |
+| ---------- | ----------- | ------- | --------------------------------------- |
+| `bpm`      | `number`    | —       | **Required.** Tempo in beats per minute |
+| `children` | `ReactNode` | —       | Child components to render              |
 
-Repeats its children every `interval` beats.
+```tsx
+<Track bpm={120}>
+  {/* Your music components here */}
+</Track>;
+```
 
-### `<Synth type={string}>`
+---
 
-Defines the synthesizer for child `Note` and `Chord` components.
+### `<Loop>`
 
-Available presets: `"sine"`, `"saw"`, `"square"`, `"tri"`, `"prophet"`,
-`"hollow"`, `"dark_ambience"`, `"bass"`, `"pluck"`
+Repeats its children at a specified beat interval. Use this for drum patterns,
+repeating melodies, or any cyclical musical phrase.
+
+| Prop       | Type        | Default | Description                                         |
+| ---------- | ----------- | ------- | --------------------------------------------------- |
+| `id`       | `string`    | —       | **Required.** Unique identifier for this loop       |
+| `interval` | `number`    | —       | **Required.** Interval in beats between repetitions |
+| `children` | `ReactNode` | —       | Content to play on each loop iteration              |
+
+```tsx
+{/* Kick drum every beat */}
+<Loop id="kick" interval={1}>
+  <Sample name="bd_haus" />
+</Loop>;
+
+{/* Chord progression every 4 beats */}
+<Loop id="chords" interval={4}>
+  <Chord notes="Am7" />
+</Loop>;
+```
+
+---
+
+### `<Sequence>`
+
+Plays children one after another with a specified interval between each. Each
+child is played at its index position × interval beats.
+
+| Prop       | Type        | Default | Description                                   |
+| ---------- | ----------- | ------- | --------------------------------------------- |
+| `interval` | `number`    | —       | **Required.** Time between each step in beats |
+| `children` | `ReactNode` | —       | Steps to play in order                        |
+
+```tsx
+{/* Arpeggio: C-E-G-C played as 16th notes */}
+<Sequence interval={0.25}>
+  <Note note="C4" />
+  <Note note="E4" />
+  <Note note="G4" />
+  <Note note="C5" />
+</Sequence>;
+
+{/* Drum pattern */}
+<Sequence interval={0.5}>
+  <Sample name="bd_haus" />
+  <Sample name="drum_snare_soft" />
+  <Sample name="bd_haus" />
+  <Sample name="drum_snare_soft" />
+</Sequence>;
+```
+
+---
+
+### `<Synth>`
+
+Defines the synthesizer configuration for child `Note` and `Chord` components.
+Provides preset sounds and allows customization of oscillator, filter, and voice
+parameters.
+
+| Prop         | Type                    | Default | Description                                                           |
+| ------------ | ----------------------- | ------- | --------------------------------------------------------------------- |
+| `type`       | `SynthType`             | —       | **Required.** Synth preset name (see below)                           |
+| `oscillator` | `OscillatorType`        | —       | Override oscillator: `"sine"`, `"square"`, `"sawtooth"`, `"triangle"` |
+| `filter`     | `Partial<FilterConfig>` | —       | Override filter settings                                              |
+| `voices`     | `Partial<VoiceConfig>`  | —       | Override voice/unison settings                                        |
+| `children`   | `ReactNode`             | —       | Note/Chord components to apply this synth to                          |
+
+**Available Synth Presets:**
+
+| Preset            | Description                                          |
+| ----------------- | ---------------------------------------------------- |
+| `"sine"`          | Pure sine wave - clean, fundamental tone             |
+| `"saw"`           | Sawtooth wave - bright, harmonically rich            |
+| `"square"`        | Square wave - hollow, clarinet-like                  |
+| `"tri"`           | Triangle wave - soft, flute-like                     |
+| `"prophet"`       | Prophet-5 inspired - warm with detuned voices        |
+| `"hollow"`        | Ethereal pad - filtered square, atmospheric          |
+| `"dark_ambience"` | Deep atmospheric pad - low-passed with many voices   |
+| `"bass"`          | Punchy bass - filtered sawtooth                      |
+| `"pluck"`         | Bright plucked string - square wave with high cutoff |
+
+**Filter Config:**
+
+| Property    | Type               | Description                                   |
+| ----------- | ------------------ | --------------------------------------------- |
+| `type`      | `FilterType`       | `"lowpass"`, `"highpass"`, `"bandpass"`, etc. |
+| `cutoff`    | `number` or `Line` | Cutoff frequency in Hz, or a Line pattern     |
+| `resonance` | `number`           | Filter resonance/Q factor                     |
+
+**Voice Config:**
+
+| Property | Type     | Description                          |
+| -------- | -------- | ------------------------------------ |
+| `count`  | `number` | Number of oscillator voices (unison) |
+| `detune` | `number` | Detune spread in cents               |
+| `spread` | `number` | Stereo spread 0-1                    |
+
+```tsx
+{/* Using a preset */}
+<Synth type="prophet">
+  <Note note="C4" />
+</Synth>;
+
+{/* Overriding filter settings */}
+<Synth type="saw" filter={{ cutoff: 2000, resonance: 8 }}>
+  <Chord notes="Am7" />
+</Synth>;
+
+{/* Thick unison lead */}
+<Synth type="saw" voices={{ count: 4, detune: 15, spread: 0.8 }}>
+  <Note note="A4" />
+</Synth>;
+```
+
+---
 
 ### `<Note>`
 
-Plays a single note with ADSR envelope.
+Plays a single note using Web Audio oscillators with ADSR envelope. Inherits
+synth settings from parent `<Synth>` component, or uses defaults.
 
-- `note` - Note name ("C4", "A#3") or frequency in Hz
-- `amp` - Volume 0-1 (default: 0.3)
-- `attack`, `decay`, `sustain`, `release` - ADSR envelope in beats
-- `oscillator` - Override synth oscillator type
-- `filter` - Override filter settings `{ cutoff, resonance, type }`
-- `voices` - Override voice settings `{ count, detune, spread }`
+| Prop            | Type                    | Default         | Description                                                  |
+| --------------- | ----------------------- | --------------- | ------------------------------------------------------------ |
+| `note`          | `string` or `number`    | —               | **Required.** Note name (`"C4"`, `"A#3"`) or frequency in Hz |
+| `amp`           | `number`                | `0.3`           | Amplitude/volume 0-1                                         |
+| `attack`        | `number`                | `0`             | Attack time in beats                                         |
+| `attack_level`  | `number`                | `1`             | Peak level at end of attack (multiplied by amp)              |
+| `decay`         | `number`                | `0`             | Decay time in beats                                          |
+| `decay_level`   | `number`                | `sustain_level` | Level at end of decay                                        |
+| `sustain`       | `number`                | `0`             | Sustain time in beats                                        |
+| `sustain_level` | `number`                | `1`             | Sustained level (multiplied by amp)                          |
+| `release`       | `number`                | `1`             | Release time in beats                                        |
+| `oscillator`    | `OscillatorType`        | —               | Override synth oscillator type                               |
+| `filter`        | `Partial<FilterConfig>` | —               | Override filter settings                                     |
+| `voices`        | `Partial<VoiceConfig>`  | —               | Override voice settings                                      |
 
-### `<Chord notes={string | array}>`
+**Note Duration:** Total duration = `attack` + `decay` + `sustain` + `release`
 
-Plays multiple notes simultaneously.
+```tsx
+{/* Simple note */}
+<Note note="A4" />;
 
-- `notes` - Chord name ("Cmaj7", "Am:4") or array of notes (["C4", "E4", "G4"])
-- Same ADSR and synth overrides as `<Note>`
+{/* Note with envelope */}
+<Note note="C4" amp={0.5} attack={0.1} sustain={0.5} release={0.3} />;
 
-### `<Sample name={string}>`
+{/* Note with frequency in Hz */}
+<Note note={440} />;
 
-Plays an audio sample file.
-
-- `name` - Sample name (without extension)
-- `amp` - Volume
-- `cutoff` - Filter cutoff (MIDI note number)
-- `rate` - Playback rate
-- `pan` - Stereo pan (-1 to 1)
-
-### `<Sequence interval={number}>`
-
-Plays children one after another with `interval` beats between each.
-
-## Installation
-
-```bash
-npm install @react-synth/synth
+{/* Note with filter override */}
+<Note note="E4" filter={{ cutoff: 800, resonance: 5 }} />;
 ```
 
-## CLI Usage
+---
 
-```bash
-# Run with hot reload
-npx react-synth song.tsx
+### `<Chord>`
 
-# Or during development
-npm run dev song.tsx
+Plays multiple notes simultaneously. Supports chord name notation (powered by
+Tonal) or explicit note arrays.
+
+| Prop            | Type                             | Default         | Description                                |
+| --------------- | -------------------------------- | --------------- | ------------------------------------------ |
+| `notes`         | `string` or `(string\|number)[]` | —               | **Required.** Chord name or array of notes |
+| `amp`           | `number`                         | `0.3`           | Amplitude/volume 0-1                       |
+| `attack`        | `number`                         | `0`             | Attack time in beats                       |
+| `attack_level`  | `number`                         | `1`             | Peak level at end of attack                |
+| `decay`         | `number`                         | `0`             | Decay time in beats                        |
+| `decay_level`   | `number`                         | `sustain_level` | Level at end of decay                      |
+| `sustain`       | `number`                         | `0`             | Sustain time in beats                      |
+| `sustain_level` | `number`                         | `1`             | Sustained level                            |
+| `release`       | `number`                         | `1`             | Release time in beats                      |
+| `oscillator`    | `OscillatorType`                 | —               | Override synth oscillator type             |
+| `filter`        | `Partial<FilterConfig>`          | —               | Override filter settings                   |
+| `voices`        | `Partial<VoiceConfig>`           | —               | Override voice settings                    |
+
+**Chord Name Format:**
+
+- Basic: `"C"`, `"Am"`, `"F#m"`, `"Bb"`
+- Extended: `"Cmaj7"`, `"Dm7"`, `"G7"`, `"Am9"`
+- With octave: `"Cmaj7:4"` (plays in octave 4, default is octave 3)
+- Slash chords: `"Dm7/F"`, `"C/E"`
+
+```tsx
+{/* Chord name */}
+<Chord notes="Am7" />;
+
+{/* Chord in specific octave */}
+<Chord notes="Cmaj7:4" />;
+
+{/* Note array */}
+<Chord notes={["C4", "E4", "G4"]} />;
+
+{/* Frequency array */}
+<Chord notes={[261.63, 329.63, 392.00]} />;
+
+{/* With envelope for pad sound */}
+<Chord notes="Em7" amp={0.4} attack={0.5} sustain={2} release={1} />;
 ```
 
-## Prerequisites
+---
 
-- Node.js v18+
+### `<Sample>`
 
-## Development
+Plays an audio sample file with optional effects. Samples are loaded from a
+built-in sample library.
 
-```bash
-# Install dependencies
-npm install
+| Prop     | Type               | Default | Description                                        |
+| -------- | ------------------ | ------- | -------------------------------------------------- |
+| `name`   | `SampleName`       | —       | **Required.** Sample name (without file extension) |
+| `amp`    | `number`           | `1`     | Amplitude/volume multiplier                        |
+| `cutoff` | `number` or `Line` | `20000` | Lowpass filter cutoff (MIDI note or Hz)            |
+| `rate`   | `number`           | `1`     | Playback rate multiplier                           |
+| `pan`    | `number`           | `0`     | Stereo pan position: -1 (left) to 1 (right)        |
 
-# Build the library
-npm run build
+**Cutoff Values (MIDI note → Hz):**
 
-# Run type checking
-npm run typecheck
+- `60` → ~262 Hz (C4)
+- `80` → ~831 Hz
+- `100` → ~2637 Hz
+- `110` → ~4699 Hz
+- `130` → ~20kHz (no filtering)
 
-# Live coding with hot reload
-npm run dev examples/simple/simple.tsx
+```tsx
+{/* Basic kick drum */}
+<Sample name="bd_haus" />;
+
+{/* Louder with filter */}
+<Sample name="bd_haus" amp={2} cutoff={100} />;
+
+{/* Hi-hat with pitch shift and panning */}
+<Sample name="drum_cymbal_closed" rate={1.2} pan={0.3} />;
+
+{/* Snare with lowpass filter */}
+<Sample name="drum_snare_soft" cutoff={80} amp={0.8} />;
 ```
 
-## Project Structure
+---
 
+## Line Patterns
+
+The `cutoff` prop on `<Note>`, `<Chord>`, and `<Sample>` components supports
+Line patterns for dynamic filter sweeps within a `<Sequence>`:
+
+```tsx
+<Sequence interval={0.25}>
+  {/* Filter sweeps from 60 to 120 over 8 steps */}
+  <Note note="C4" filter={{ cutoff: { from: 60, to: 120, steps: 8 } }} />
+  <Note note="E4" filter={{ cutoff: { from: 60, to: 120, steps: 8 } }} />
+  <Note note="G4" filter={{ cutoff: { from: 60, to: 120, steps: 8 } }} />
+  {/* ... */}
+</Sequence>;
 ```
-react-synth/
-├── src/
-│   ├── index.ts            # Main exports
-│   ├── audio/
-│   │   ├── scheduler.ts    # Beat scheduling
-│   │   └── sampleLoader.ts # Audio sample loading
-│   ├── components/
-│   │   ├── Track.tsx       # Root component
-│   │   ├── Loop.tsx        # Looping
-│   │   ├── Note/           # Oscillator notes
-│   │   ├── Chord.tsx       # Chord playback
-│   │   ├── Sample/         # Sample playback
-│   │   ├── Synth/          # Synth presets
-│   │   └── Sequence.tsx    # Sequential playback
-│   ├── types/
-│   │   └── music.ts        # Type definitions
-│   └── utils/
-│       ├── envelope.ts     # ADSR envelope
-│       ├── line.ts         # Value interpolation
-│       └── notes.ts        # Note/chord utilities
-├── cli/
-│   └── cli.ts              # CLI entry point (includes React + JSDOM setup)
-├── examples/
-│   └── simple/
-│       └── simple.tsx      # Demo song
-├── dist/                   # Build output
-├── package.json
-├── tsconfig.json
-└── vite.config.ts
-```
+
+| Property | Type      | Description                       |
+| -------- | --------- | --------------------------------- |
+| `from`   | `number`  | Starting cutoff value (MIDI note) |
+| `to`     | `number`  | Ending cutoff value (MIDI note)   |
+| `steps`  | `number`  | Number of interpolation steps     |
+| `mirror` | `boolean` | If true, goes up then back down   |
+| `step`   | `number`  | Manual step index override        |
 
 ## Inspired By
 
 - [Sonic Pi](https://sonic-pi.net/) - The original live coding synth
-- React's declarative component model
 
 ## License
 
