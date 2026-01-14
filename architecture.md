@@ -158,4 +158,3 @@ export default function DaftPunk() {
 
 - Tone.js can't be used. `node-web-audio-api` is not fully compatible with web
   audioContext
-- `[root, root + 12, root + 7, root + 12].ring.tick(:pattern)` doesnt work
