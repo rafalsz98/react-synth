@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "rm -rf ../docs && next build && mv out ../docs",
+    "build": "rm -rf ../docs && next build && echo '' > out/.nojekyll && mv out ../docs",
     "dev": "next dev",
     "start": "serve ../docs",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",

@@ -1,7 +1,12 @@
 self.__BUILD_MANIFEST = {
   "__rewrites": {
     "afterFiles": [],
-    "beforeFiles": [],
+    "beforeFiles": [
+      {
+        "source": "/react-synth//_next/:path+",
+        "destination": "/react-synth/_next/:path+"
+      }
+    ],
     "fallback": []
   },
   "sortedPages": [
