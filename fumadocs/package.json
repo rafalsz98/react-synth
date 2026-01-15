@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "rm -rf ../docs && next build && mv out ../docs",
     "dev": "next dev",
-    "start": "serve out",
+    "start": "serve ../docs",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
     "postinstall": "fumadocs-mdx",
     "lint": "eslint"
