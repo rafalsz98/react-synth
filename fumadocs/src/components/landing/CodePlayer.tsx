@@ -35,7 +35,7 @@ export function CodePlayer({
           {highlighted}
         </div>
 
-        <button
+        {/* <button
           onClick={() => setIsPlaying(!isPlaying)}
           className="absolute bottom-6 right-6 p-3 rounded-full bg-fd-primary text-fd-primary-foreground shadow-lg hover:scale-105 transition-transform active:scale-95 flex items-center justify-center"
           aria-label={isPlaying ? "Stop" : "Play"}
@@ -45,7 +45,7 @@ export function CodePlayer({
           ) : (
             <Play className="w-5 h-5 fill-current" />
           )}
-        </button>
+        </button> */}
       </div>
     </div>
   );
