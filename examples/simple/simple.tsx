@@ -20,79 +20,24 @@ export default function SimpleSong() {
   ];
 
   return (
-    <Track bpm={113}>
-      <Loop id="kick" interval={1}>
-        <Sample name="bd_haus" amp={0.5} cutoff={100} />
-        {/* <Chord notes={["A5"]} amp={1} /> */}
-      </Loop>
-
-      <Loop id="click" interval={2}>
-        <Sequence interval={0.25}>
-          {[...Array(4)].map((_, i) => (
-            <Sample
-              key={i}
-              name="drum_cymbal_closed"
-              amp={0.5}
-              rate={1.5}
-              pan={0.1}
-            />
-          ))}
+    <Track bpm={124}>
+      <Loop id="loop1" interval={1}>
+        <Sequence interval={0.5}>
+          <Sample name="bd_haus" />
+          <Sample name="drum_cymbal_closed" />
         </Sequence>
       </Loop>
 
-      <Giorgio />
-
-      {
-        /* <Loop id="giorgio_arp" interval={16}>
-        <Synth type="prophet">
-          <Sequence interval={4}>
-            {patterns.map((pattern, idx) => (
-              <Sequence key={idx} interval={0.25}>
-                {[...Array(16)].map((_, i) => {
-                  // Global step index across all 64 notes (4 patterns × 16 notes)
-                  // This makes the cutoff filter sweep continuously like Sonic Pi's .tick(:filter)
-                  const globalStep = idx * 16 + i;
-                  return (
-                    <Note
-                      key={i}
-                      note={pattern[i % pattern.length] as NoteName}
-                      release={0.2}
-                      filter={{
-                        cutoff: {
-                          from: 60,
-                          to: 110,
-                          steps: 16,
-                          mirror: true,
-                          step: globalStep,
-                        },
-                        resonance: 0.8,
-                      }}
-                      amp={2}
-                    />
-                  );
-                })}
-              </Sequence>
-            ))}
-          </Sequence>
-        </Synth>
-      </Loop> */
-      }
-
-      <Loop id="pads" interval={16}>
-        <Synth type="hollow">
-          <Sequence interval={4}>
-            <Chord notes={["A3", "C4", "E4"]} release={4} amp={0.5} />
-            <Chord notes={["G3", "B3", "D4"]} release={4} amp={0.5} />
-            <Chord notes={["F3", "A3", "C4"]} release={4} amp={0.5} />
-            <Chord notes={["E3", "G3", "B3"]} release={4} amp={0.5} />
+      <Loop id="loop2" interval={2}>
+        <Synth type="bass">
+          <Sequence interval={0.5}>
+            <Note note="C2" />
+            <Note note="C3" />
+            <Note note="Bb2" />
+            <Note note="G2" />
           </Sequence>
         </Synth>
       </Loop>
-      {
-        /* <Loop id="test" interval={2}>
-        <Chord notes={["A##2", "F1", "C4"]} amp={1} />
-      </Loop> */
-      }
     </Track>
   );
 }

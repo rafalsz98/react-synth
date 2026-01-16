@@ -1,16 +1,26 @@
 import { highlight } from "fumadocs-core/highlight";
 import { CodePlayer } from "./CodePlayer";
 
-const EXAMPLE_CODE = `import { Track, Loop, Synth, Note } from "@react-synth/synth";
+const EXAMPLE_CODE = `import { Track, Loop, Sequence, Synth, Note, Sample } from "@react-synth/synth";
 
-export default function MySong() {
+export default function FunkyBeat() {
   return (
-    <Track bpm={120}>
-      <Loop interval={4}>
-        <Synth type="prophet">
-          <Note note="C4" />
-          <Note note="E4" />
-          <Note note="G4" />
+    <Track bpm={124}>
+      <Loop id="loop1" interval={1}>
+        <Sequence interval={0.5}>
+          <Sample name="bd_haus" />
+          <Sample name="drum_cymbal_closed" />
+        </Sequence>
+      </Loop>
+
+      <Loop id="loop2" interval={2}>
+        <Synth type="bass">
+          <Sequence interval={0.5}>
+            <Note note="C2" />
+            <Note note="C3" />
+            <Note note="Bb2" />
+            <Note note="G2" />
+          </Sequence>
         </Synth>
       </Loop>
     </Track>
