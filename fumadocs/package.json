@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@orama/orama": "^3.1.18",
+    "framer-motion": "^12.26.2",
     "fumadocs-core": "16.4.7",
     "fumadocs-mdx": "14.2.5",
     "fumadocs-ui": "16.4.7",
@@ -26,11 +27,11 @@
     "@types/node": "^25.0.5",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "16.1.1",
     "postcss": "^8.5.6",
     "serve": "^14.2.5",
     "tailwindcss": "^4.1.18",
-    "typescript": "^5.9.3",
-    "eslint-config-next": "16.1.1",
-    "eslint": "^9.39.2"
+    "typescript": "^5.9.3"
   }
 }
