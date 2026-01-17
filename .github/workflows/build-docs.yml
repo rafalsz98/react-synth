@@ -1,0 +1,40 @@
+name: Build Docs
+
+on:
+  push:
+    branches:
+      - master
+      - feat/github-pages
+    paths:
+      - "fumadocs/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: fumadocs/package-lock.json
+
+      - name: Install dependencies
+        working-directory: fumadocs
+        run: npm ci
+
+      - name: Build docs
+        working-directory: fumadocs
+        run: npm run build
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/
+          git diff --staged --quiet || git commit -m "docs: rebuild documentation"
+          git push
