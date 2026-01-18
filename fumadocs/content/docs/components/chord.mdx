@@ -1,0 +1,48 @@
+---
+title: Chord
+description: Plays multiple notes
+---
+
+## `<Chord>`
+
+Plays multiple notes simultaneously. Supports chord name notation (powered by
+Tonal) or explicit note arrays.
+
+| Prop            | Type                             | Default         | Description                                |
+| --------------- | -------------------------------- | --------------- | ------------------------------------------ |
+| `notes`         | `string` or `(string\|number)[]` | —               | **Required.** Chord name or array of notes |
+| `amp`           | `number`                         | `0.3`           | Amplitude/volume 0-1                       |
+| `attack`        | `number`                         | `0`             | Attack time in beats                       |
+| `attack_level`  | `number`                         | `1`             | Peak level at end of attack                |
+| `decay`         | `number`                         | `0`             | Decay time in beats                        |
+| `decay_level`   | `number`                         | `sustain_level` | Level at end of decay                      |
+| `sustain`       | `number`                         | `0`             | Sustain time in beats                      |
+| `sustain_level` | `number`                         | `1`             | Sustained level                            |
+| `release`       | `number`                         | `1`             | Release time in beats                      |
+| `oscillator`    | [`OscillatorType`](../synth)      | —               | Override synth oscillator type             |
+| `filter`        | `Partial<FilterConfig>`          | —               | Override filter settings ([see config](../synth#filter-config)) |
+| `voices`        | `Partial<VoiceConfig>`           | —               | Override voice settings ([see config](../synth#voice-config)) |
+
+### Chord Name Format
+
+- Basic: `"C"`, `"Am"`, `"F#m"`, `"Bb"`
+- Extended: `"Cmaj7"`, `"Dm7"`, `"G7"`, `"Am9"`
+- With octave: `"Cmaj7:4"` (plays in octave 4, default is octave 3)
+- Slash chords: `"Dm7/F"`, `"C/E"`
+
+```tsx
+{/* Chord name */}
+<Chord notes="Am7" />
+
+{/* Chord in specific octave */}
+<Chord notes="Cmaj7:4" />
+
+{/* Note array */}
+<Chord notes={["C4", "E4", "G4"]} />
+
+{/* Frequency array */}
+<Chord notes={[261.63, 329.63, 392.00]} />
+
+{/* With envelope for pad sound */}
+<Chord notes="Em7" amp={0.4} attack={0.5} sustain={2} release={1} />
+```

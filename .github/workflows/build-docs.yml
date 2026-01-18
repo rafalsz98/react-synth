@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - feat/github-pages
     paths:
       - "fumadocs/**"
   workflow_dispatch:

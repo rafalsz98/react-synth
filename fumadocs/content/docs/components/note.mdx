@@ -1,0 +1,40 @@
+---
+title: Note
+description: Plays a single note
+---
+
+## `<Note>`
+
+Plays a single note using Web Audio oscillators with ADSR envelope. Inherits
+synth settings from parent `<Synth>` component, or uses defaults.
+
+| Prop            | Type                    | Default         | Description                                                  |
+| --------------- | ----------------------- | --------------- | ------------------------------------------------------------ |
+| `note`          | `string` or `number`    | —               | **Required.** Note name (`"C4"`, `"A#3"`) or frequency in Hz |
+| `amp`           | `number`                | `0.3`           | Amplitude/volume 0-1                                         |
+| `attack`        | `number`                | `0`             | Attack time in beats                                         |
+| `attack_level`  | `number`                | `1`             | Peak level at end of attack (multiplied by amp)              |
+| `decay`         | `number`                | `0`             | Decay time in beats                                          |
+| `decay_level`   | `number`                | `sustain_level` | Level at end of decay                                        |
+| `sustain`       | `number`                | `0`             | Sustain time in beats                                        |
+| `sustain_level` | `number`                | `1`             | Sustained level (multiplied by amp)                          |
+| `release`       | `number`                | `1`             | Release time in beats                                        |
+| `oscillator`    | [`OscillatorType`](../synth)      | —               | Override synth oscillator type             |
+| `filter`        | `Partial<FilterConfig>`          | —               | Override filter settings ([see config](../synth#filter-config)) |
+| `voices`        | `Partial<VoiceConfig>`           | —               | Override voice settings ([see config](../synth#voice-config)) |
+
+**Note Duration:** Total duration = `attack` + `decay` + `sustain` + `release`
+
+```tsx
+{/* Simple note */}
+<Note note="A4" />
+
+{/* Note with envelope */}
+<Note note="C4" amp={0.5} attack={0.1} sustain={0.5} release={0.3} />
+
+{/* Note with frequency in Hz */}
+<Note note={440} />
+
+{/* Note with filter override */}
+<Note note="E4" filter={{ cutoff: 800, resonance: 5 }} />
+```

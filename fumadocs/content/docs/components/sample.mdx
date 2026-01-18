@@ -1,0 +1,39 @@
+---
+title: Sample
+description: Plays audio samples
+---
+
+## `<Sample>`
+
+Plays an audio sample file with optional effects. Samples are loaded from a
+built-in sample library.
+
+| Prop     | Type               | Default | Description                                        |
+| -------- | ------------------ | ------- | -------------------------------------------------- |
+| `name`   | `SampleName`       | —       | **Required.** Sample name (without file extension) |
+| `amp`    | `number`           | `1`     | Amplitude/volume multiplier                        |
+| `cutoff` | `number` or `Line` | `20000` | Lowpass filter cutoff (MIDI note or Hz)            |
+| `rate`   | `number`           | `1`     | Playback rate multiplier                           |
+| `pan`    | `number`           | `0`     | Stereo pan position: -1 (left) to 1 (right)        |
+
+### Cutoff Values (MIDI note → Hz)
+
+- `60` → ~262 Hz (C4)
+- `80` → ~831 Hz
+- `100` → ~2637 Hz
+- `110` → ~4699 Hz
+- `130` → ~20kHz (no filtering)
+
+```tsx
+{/* Basic kick drum */}
+<Sample name="bd_haus" />
+
+{/* Louder with filter */}
+<Sample name="bd_haus" amp={2} cutoff={100} />
+
+{/* Hi-hat with pitch shift and panning */}
+<Sample name="drum_cymbal_closed" rate={1.2} pan={0.3} />
+
+{/* Snare with lowpass filter */}
+<Sample name="drum_snare_soft" cutoff={80} amp={0.8} />
+```

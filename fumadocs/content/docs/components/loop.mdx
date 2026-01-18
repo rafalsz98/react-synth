@@ -1,0 +1,27 @@
+---
+title: Loop
+description: Repeats content at intervals
+---
+
+## `<Loop>`
+
+Repeats its children at a specified beat interval. Use this for drum patterns,
+repeating melodies, or any cyclical musical phrase.
+
+| Prop       | Type        | Default | Description                                         |
+| ---------- | ----------- | ------- | --------------------------------------------------- |
+| `id`       | `string`    | —       | **Required.** Unique identifier for this loop       |
+| `interval` | `number`    | —       | **Required.** Interval in beats between repetitions |
+| `children` | `ReactNode` | —       | Content to play on each loop iteration              |
+
+```tsx
+{/* Kick drum every beat */}
+<Loop id="kick" interval={1}>
+  <Sample name="bd_haus" />
+</Loop>
+
+{/* Chord progression every 4 beats */}
+<Loop id="chords" interval={4}>
+  <Chord notes="Am7" />
+</Loop>
+```
