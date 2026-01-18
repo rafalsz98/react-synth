@@ -28,7 +28,7 @@ export default function HomePage() {
             Get Started
           </Link>
           <Link
-            href="https://github.com/rafal/react-synth"
+            href="https://github.com/rafalsz98/react-synth"
             className="px-8 py-3 rounded-full bg-fd-secondary text-fd-secondary-foreground font-semibold hover:bg-fd-secondary/80 transition-colors text-sm sm:text-base"
           >
             GitHub
