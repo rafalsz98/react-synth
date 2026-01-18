@@ -29,5 +29,8 @@ jobs:
       - name: Build package
         run: npm run build
 
+      - name: Update npm
+        run: npm install -g npm@latest
+
       - name: Publish to npm
         run: npm publish --access public --provenance
