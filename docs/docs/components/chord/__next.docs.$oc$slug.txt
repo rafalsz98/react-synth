@@ -1,4 +1,4 @@
 1:"$Sreact.fragment"
 2:I[46305,["https://rafalsz98.github.io/react-synth/_next/static/chunks/fa0eb2fac3d3f70c.js","https://rafalsz98.github.io/react-synth/_next/static/chunks/adca88754080e6ce.js"],"default"]
 3:I[92414,["https://rafalsz98.github.io/react-synth/_next/static/chunks/fa0eb2fac3d3f70c.js","https://rafalsz98.github.io/react-synth/_next/static/chunks/adca88754080e6ce.js"],"default"]
-0:{"buildId":"3ZXIelRM0_HDhdKTrOIhx","rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"loading":null,"isPartial":false}
+0:{"buildId":"9UvJll2-1Tj-PAJCzL-JD","rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"loading":null,"isPartial":false}
