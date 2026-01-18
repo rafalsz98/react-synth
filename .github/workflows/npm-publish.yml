@@ -33,4 +33,9 @@ jobs:
         run: npm install -g npm@latest
 
       - name: Publish to npm
-        run: npm publish --access public --provenance
+        run: |
+          if [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
+            npm publish --access public --provenance --tag alpha
+          else
+            npm publish --access public --provenance
+          fi
