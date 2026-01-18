@@ -1,0 +1,71 @@
+---
+title: Synth
+description: Synthesizer configuration
+---
+
+## `<Synth>`
+
+Defines the synthesizer configuration for child `Note` and `Chord` components.
+Provides preset sounds and allows customization of oscillator, filter, and voice
+parameters.
+
+| Prop         | Type                    | Default | Description                                                           |
+| ------------ | ----------------------- | ------- | --------------------------------------------------------------------- |
+| `type`       | `SynthType`             | —       | **Required.** Synth preset name (see below)                           |
+| `oscillator` | `OscillatorType`        | —       | Override oscillator: `"sine"`, `"square"`, `"sawtooth"`, `"triangle"` |
+| `filter`     | `Partial<FilterConfig>` | —       | Override filter settings                                              |
+| `voices`     | `Partial<VoiceConfig>`  | —       | Override voice/unison settings                                        |
+| `children`   | `ReactNode`             | —       | Note/Chord components to apply this synth to                          |
+
+### Available Synth Presets
+
+| Preset            | Description                                          |
+| ----------------- | ---------------------------------------------------- |
+| `"sine"`          | Pure sine wave - clean, fundamental tone             |
+| `"saw"`           | Sawtooth wave - bright, harmonically rich            |
+| `"square"`        | Square wave - hollow, clarinet-like                  |
+| `"tri"`           | Triangle wave - soft, flute-like                     |
+| `"prophet"`       | Prophet-5 inspired - warm with detuned voices        |
+| `"hollow"`        | Ethereal pad - filtered square, atmospheric          |
+| `"dark_ambience"` | Deep atmospheric pad - low-passed with many voices   |
+| `"bass"`          | Punchy bass - filtered sawtooth                      |
+| `"pluck"`         | Bright plucked string - square wave with high cutoff |
+
+### Filter Config
+
+| Property    | Type               | Description                                   |
+| ----------- | ------------------ | --------------------------------------------- |
+| `type`      | `FilterType`       | `"lowpass"`, `"highpass"`, `"bandpass"`, etc. |
+| `cutoff`    | `number` or `Line` | Cutoff frequency in Hz, or a Line pattern     |
+| `resonance` | `number`           | Filter resonance/Q factor                     |
+
+### Voice Config
+
+| Property | Type     | Description                          |
+| -------- | -------- | ------------------------------------ |
+| `count`  | `number` | Number of oscillator voices (unison) |
+| `detune` | `number` | Detune spread in cents               |
+| `spread` | `number` | Stereo spread 0-1                    |
+
+```tsx
+{
+  /* Using a preset */
+}
+<Synth type="prophet">
+  <Note note="C4" />
+</Synth>;
+
+{
+  /* Overriding filter settings */
+}
+<Synth type="saw" filter={{ cutoff: 2000, resonance: 8 }}>
+  <Chord notes="Am7" />
+</Synth>;
+
+{
+  /* Thick unison lead */
+}
+<Synth type="saw" voices={{ count: 4, detune: 15, spread: 0.8 }}>
+  <Note note="A4" />
+</Synth>;
+```

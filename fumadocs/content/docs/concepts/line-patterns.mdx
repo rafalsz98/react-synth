@@ -1,0 +1,27 @@
+---
+title: Line Patterns
+description: Dynamic parameter automation
+---
+
+## Line Patterns
+
+The `cutoff` prop on `<Note>`, `<Chord>`, and `<Sample>` components supports
+Line patterns for dynamic filter sweeps within a `<Sequence>`:
+
+```tsx
+<Sequence interval={0.25}>
+  {/* Filter sweeps from 60 to 120 over 8 steps */}
+  <Note note="C4" filter={{ cutoff: { from: 60, to: 120, steps: 8 } }} />
+  <Note note="E4" filter={{ cutoff: { from: 60, to: 120, steps: 8 } }} />
+  <Note note="G4" filter={{ cutoff: { from: 60, to: 120, steps: 8 } }} />
+  {/* ... */}
+</Sequence>
+```
+
+| Property | Type      | Description                       |
+| -------- | --------- | --------------------------------- |
+| `from`   | `number`  | Starting cutoff value (MIDI note) |
+| `to`     | `number`  | Ending cutoff value (MIDI note)   |
+| `steps`  | `number`  | Number of interpolation steps     |
+| `mirror` | `boolean` | If true, goes up then back down   |
+| `step`   | `number`  | Manual step index override        |

@@ -1,0 +1,36 @@
+---
+title: Sequence
+description: Plays children sequentially
+---
+
+## `<Sequence>`
+
+Plays children one after another with a specified interval between each. Each
+child is played at its index position × interval beats.
+
+| Prop       | Type        | Default | Description                                   |
+| ---------- | ----------- | ------- | --------------------------------------------- |
+| `interval` | `number`    | —       | **Required.** Time between each step in beats |
+| `children` | `ReactNode` | —       | Steps to play in order                        |
+
+```tsx
+{
+  /* Arpeggio: C-E-G-C played as 16th notes */
+}
+<Sequence interval={0.25}>
+  <Note note="C4" />
+  <Note note="E4" />
+  <Note note="G4" />
+  <Note note="C5" />
+</Sequence>;
+
+{
+  /* Drum pattern */
+}
+<Sequence interval={0.5}>
+  <Sample name="bd_haus" />
+  <Sample name="drum_snare_soft" />
+  <Sample name="bd_haus" />
+  <Sample name="drum_snare_soft" />
+</Sequence>;
+```

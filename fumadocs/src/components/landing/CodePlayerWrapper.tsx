@@ -1,24 +1,9 @@
-import {
-  Chord,
-  Loop,
-  Note,
-  NoteName,
-  Sample,
-  Sequence,
-  Synth,
-  Track,
-} from "@react-synth/synth";
-import React from "react";
-import { Giorgio } from "./component";
+import { highlight } from "fumadocs-core/highlight";
+import { CodePlayer } from "./CodePlayer";
 
-export default function SimpleSong() {
-  const patterns: [string, string, string, string][] = [
-    ["A1", "A2", "E2", "A2"], // a1: root, +12, +7, +12
-    ["G1", "G2", "D2", "G2"], // g1: root, +12, +7, +12
-    ["F1", "F2", "C2", "F2"], // f1: root, +12, +7, +12
-    ["E1", "E2", "B1", "E2"], // e1: root, +12, +7, +12
-  ];
+const EXAMPLE_CODE = `import { Track, Loop, Sequence, Synth, Note, Sample } from "@react-synth/synth";
 
+export default function FunkyBeat() {
   return (
     <Track bpm={124}>
       <Loop id="loop1" interval={1}>
@@ -40,4 +25,16 @@ export default function SimpleSong() {
       </Loop>
     </Track>
   );
+}`;
+
+export async function CodePlayerWrapper() {
+  const highlighted = await highlight(EXAMPLE_CODE, {
+    lang: "tsx",
+    themes: {
+      light: "github-light",
+      dark: "github-dark",
+    },
+  });
+
+  return <CodePlayer highlighted={highlighted} filename="song.tsx" />;
 }

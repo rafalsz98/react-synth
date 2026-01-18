@@ -1,0 +1,18 @@
+---
+title: Track
+description: The root component for React Synth
+---
+
+## `<Track>`
+
+Root component that sets the tempo and provides audio context. All other
+components must be nested inside a Track.
+
+| Prop       | Type        | Default | Description                             |
+| ---------- | ----------- | ------- | --------------------------------------- |
+| `bpm`      | `number`    | —       | **Required.** Tempo in beats per minute |
+| `children` | `ReactNode` | —       | Child components to render              |
+
+```tsx
+<Track bpm={120}>{/* Your music components here */}</Track>
+```
