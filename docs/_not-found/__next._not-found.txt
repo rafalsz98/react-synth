@@ -1,4 +1,4 @@
 1:"$Sreact.fragment"
 2:I[46305,["https://rafalsz98.github.io/react-synth/_next/static/chunks/adca88754080e6ce.js","https://rafalsz98.github.io/react-synth/_next/static/chunks/34cfb8d498be443d.js","https://rafalsz98.github.io/react-synth/_next/static/chunks/69ed09d6aaadcc96.js","https://rafalsz98.github.io/react-synth/_next/static/chunks/173324c6c2f74b4a.js"],"default"]
 3:I[92414,["https://rafalsz98.github.io/react-synth/_next/static/chunks/adca88754080e6ce.js","https://rafalsz98.github.io/react-synth/_next/static/chunks/34cfb8d498be443d.js","https://rafalsz98.github.io/react-synth/_next/static/chunks/69ed09d6aaadcc96.js","https://rafalsz98.github.io/react-synth/_next/static/chunks/173324c6c2f74b4a.js"],"default"]
-0:{"buildId":"Bj5j6A-XZ-fgnVXIUjXON","rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"loading":null,"isPartial":false}
+0:{"buildId":"3ZXIelRM0_HDhdKTrOIhx","rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"loading":null,"isPartial":false}
