@@ -25,15 +25,23 @@ built-in sample library.
 - `130` → ~20kHz (no filtering)
 
 ```tsx
-{/* Basic kick drum */}
-<Sample name="bd_haus" />
+{
+  /* Basic kick drum */
+}
+<Sample name="bd_haus" />;
 
-{/* Louder with filter */}
-<Sample name="bd_haus" amp={2} cutoff={100} />
+{
+  /* Louder with filter */
+}
+<Sample name="bd_haus" amp={2} cutoff={100} />;
 
-{/* Hi-hat with pitch shift and panning */}
-<Sample name="drum_cymbal_closed" rate={1.2} pan={0.3} />
+{
+  /* Hi-hat with pitch shift and panning */
+}
+<Sample name="drum_cymbal_closed" rate={1.2} pan={0.3} />;
 
-{/* Snare with lowpass filter */}
-<Sample name="drum_snare_soft" cutoff={80} amp={0.8} />
+{
+  /* Snare with lowpass filter */
+}
+<Sample name="drum_snare_soft" cutoff={80} amp={0.8} />;
 ```

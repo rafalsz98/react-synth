@@ -48,18 +48,24 @@ parameters.
 | `spread` | `number` | Stereo spread 0-1                    |
 
 ```tsx
-{/* Using a preset */}
+{
+  /* Using a preset */
+}
 <Synth type="prophet">
   <Note note="C4" />
-</Synth>
+</Synth>;
 
-{/* Overriding filter settings */}
+{
+  /* Overriding filter settings */
+}
 <Synth type="saw" filter={{ cutoff: 2000, resonance: 8 }}>
   <Chord notes="Am7" />
-</Synth>
+</Synth>;
 
-{/* Thick unison lead */}
+{
+  /* Thick unison lead */
+}
 <Synth type="saw" voices={{ count: 4, detune: 15, spread: 0.8 }}>
   <Note note="A4" />
-</Synth>
+</Synth>;
 ```

@@ -11,7 +11,7 @@ const useIsClient = () =>
   useSyncExternalStore(
     emptySubscribe,
     () => true,
-    () => false
+    () => false,
   );
 
 // Generate muted colors across the spectrum
@@ -29,7 +29,7 @@ export function Waveform() {
 
   return (
     <div
-      className="flex items-end justify-center gap-[2px] w-full pointer-events-none select-none"
+      className="flex items-end justify-center gap-0.5 w-full pointer-events-none select-none"
       style={{ height: "200px" }}
       aria-hidden="true"
     >

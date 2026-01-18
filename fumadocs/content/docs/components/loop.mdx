@@ -15,13 +15,17 @@ repeating melodies, or any cyclical musical phrase.
 | `children` | `ReactNode` | —       | Content to play on each loop iteration              |
 
 ```tsx
-{/* Kick drum every beat */}
+{
+  /* Kick drum every beat */
+}
 <Loop id="kick" interval={1}>
   <Sample name="bd_haus" />
-</Loop>
+</Loop>;
 
-{/* Chord progression every 4 beats */}
+{
+  /* Chord progression every 4 beats */
+}
 <Loop id="chords" interval={4}>
   <Chord notes="Am7" />
-</Loop>
+</Loop>;
 ```

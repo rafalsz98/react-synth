@@ -14,8 +14,14 @@ export const metadata: Metadata = {
   },
   description: "A React library for building musical applications with React",
   icons: {
-    icon: process.env.NODE_ENV === "production" ? "/react-synth/react-synth.png" : "/react-synth.png",
-    apple: process.env.NODE_ENV === "production" ? "/react-synth/react-synth.png" : "/react-synth.png",
+    icon:
+      process.env.NODE_ENV === "production"
+        ? "/react-synth/react-synth.png"
+        : "/react-synth.png",
+    apple:
+      process.env.NODE_ENV === "production"
+        ? "/react-synth/react-synth.png"
+        : "/react-synth.png",
   },
 };
 
