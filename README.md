@@ -1,5 +1,7 @@
 # React Synth 🎹
 
+[![npm](https://img.shields.io/npm/v/@react-synth/synth)](https://www.npmjs.com/package/@react-synth/synth)
+
 This is a fun little experiment showing that React API can be used outside of
 browser environment to render... music instead of HTML.
 
